@@ -2,7 +2,9 @@
   <div
     class="container mx-auto md:max-w-md md:shadow-lg md:my-4 md:border border-primary md:rounded"
   >
-    <header class="bg-dark text-white h-16 flex items-center shadow">
+    <header
+      class="sticky top-0 bg-dark text-white h-16 flex items-center shadow"
+    >
       <router-link to="/app/">
         <TIcon class="ml-2 w-10 p-2 text-white" name="close" />
       </router-link>
@@ -22,7 +24,7 @@
         </div>
       </div>
     </header>
-    <main class="p-2">
+    <main class="p-2 overflow-y-scroll">
       <div
         v-for="(expense, expenseIndex) in expenses"
         :key="expenseIndex"
@@ -74,6 +76,68 @@ export default {
     isMenuOpen: false,
     activeExpense: 0,
     expenses: [
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 30,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 50,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 70,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 30,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 50,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 70,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+      {
+        date: new Date(),
+        amount: 20,
+        notes: ''
+      },
+
       {
         date: new Date(),
         amount: 20,
