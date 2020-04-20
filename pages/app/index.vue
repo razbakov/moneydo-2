@@ -87,8 +87,8 @@
       >
         <div class="bg-white p-4 rounded">
           <TForm
-            :fields="movingFields"
             v-model="moving"
+            :fields="movingFields"
             submit-label="Move"
             show-cancel
             @cancel="moveend()"
