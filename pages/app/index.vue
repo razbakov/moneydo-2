@@ -20,18 +20,24 @@
         <div
           v-for="(envelope, envelopeIndex) in envelopes"
           :key="envelope.label"
-          :class="{ 'bg-green-500': draggingTo === envelopeIndex }"
+          :class="{
+            'bg-gray-200': draggingTo === envelopeIndex,
+            'opacity-50': draggingItem === envelopeIndex
+          }"
           class="p-2 bg-white rounded text-gray-600 shadow-top text-center"
           draggable="true"
           @dragstart="dragstart(envelopeIndex, $event)"
           @dragend="dragend($event)"
           @dragenter="dragenter(envelopeIndex, $event)"
           @dragleave="dragleave(envelopeIndex, $event)"
+          @dragover.prevent
         >
           <div class="text-lg font-bold font-mono text-green-500 leading-none">
             {{ envelope.today }}
           </div>
-          <div class="text-xs text-gray-600">{{ envelope.label }}</div>
+          <div class="text-xs text-gray-600">
+            {{ envelope.label }}
+          </div>
         </div>
       </div>
       <div class="mt-2">
@@ -72,25 +78,52 @@
         </div>
       </div>
     </main>
+    <template v-if="isMovingEditorShown">
+      <div
+        class="absolute w-full h-full top-0 left-0 bg-black opacity-50"
+      ></div>
+      <div
+        class="absolute w-full h-full top-0 left-0 flex items-center justify-center"
+        @click="moveend(false)"
+      >
+        <div class="bg-white p-4 rounded">
+          <TForm
+            :fields="movingFields"
+            v-model="moving"
+            submit-label="Move"
+            @save="moveend()"
+          />
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import TIcon from '~/components/TIcon'
 import THamburger from '~/components/THamburger'
+import TForm from '~/components/TForm'
 
 export default {
   layout: 'empty',
   transition: 'slide-down',
   components: {
     TIcon,
-    THamburger
+    THamburger,
+    TForm
   },
   data: () => ({
+    moving: null,
+    movingFields: [
+      {
+        name: 'amount'
+      }
+    ],
     isMenuOpen: false,
     isPointerShown: false,
     draggingItem: null,
     draggingTo: null,
+    isMovingEditorShown: false,
     mouseLeft: 0,
     mouseTop: 0,
     categories: [
@@ -151,20 +184,22 @@ export default {
     ]
   }),
   methods: {
+    moveend() {
+      this.isMovingEditorShown = false
+      this.draggingItem = null
+      this.draggingTo = null
+    },
     dragstart(item, e) {
       this.draggingItem = item
-      e.target.style.opacity = 0.5
       e.dataTransfer.setData('text/plain', 'dummy')
     },
     dragend(e) {
-      e.target.style.opacity = 1
+      this.isMovingEditorShown = true
     },
     dragenter(index, e) {
       this.draggingTo = index
     },
-    dragleave(item, e) {
-      this.draggingTo = null
-    },
+    dragleave(item, e) {},
     listenToMouseMove(isActive) {
       this.isPointerShown = isActive
 
