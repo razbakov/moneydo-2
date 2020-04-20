@@ -87,15 +87,13 @@
             v-else-if="field.type !== 'hidden'"
             :id="field.name"
             v-model="data[field.name]"
-            :disabled="field.disabled"
-            :placeholder="field.placeholder"
-            :type="field.type || 'text'"
+            v-bind="field"
             :class="
               error && error.fields && error.fields[field.name]
                 ? 'border-red-500'
                 : ''
             "
-            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            class="bg-gray-200 font-mono appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           />
         </div>
       </div>

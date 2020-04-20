@@ -84,13 +84,14 @@
       ></div>
       <div
         class="absolute w-full h-full top-0 left-0 flex items-center justify-center"
-        @click="moveend(false)"
       >
         <div class="bg-white p-4 rounded">
           <TForm
             :fields="movingFields"
             v-model="moving"
             submit-label="Move"
+            show-cancel
+            @cancel="moveend()"
             @save="moveend()"
           />
         </div>
@@ -116,7 +117,9 @@ export default {
     moving: null,
     movingFields: [
       {
-        name: 'amount'
+        name: 'amount',
+        type: 'tel',
+        autocomplete: 'off'
       }
     ],
     isMenuOpen: false,

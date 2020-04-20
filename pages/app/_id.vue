@@ -53,7 +53,7 @@
           ref="input"
           v-model="expenses[activeExpense].amount"
           v-focus
-          type="number"
+          type="tel"
           class="w-1/3 mr-2 bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
         />
         <input
