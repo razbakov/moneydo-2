@@ -37,7 +37,7 @@
       class="fixed bottom-0 w-full h-24 bg-white rounded-t shadow-top p-2"
     >
       <input
-        v-model="expense[activeExpense].amount"
+        v-model="expenses[activeExpense].amount"
         type="number"
         class="bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
       />
