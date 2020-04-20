@@ -37,7 +37,8 @@ export default {
   plugins: [
     '~/plugins/composition-api',
     '~/plugins/firebase',
-    '~/plugins/router'
+    '~/plugins/router',
+    '~/plugins/directives'
   ],
   /*
    ** Nuxt.js dev-modules

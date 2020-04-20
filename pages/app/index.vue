@@ -86,14 +86,48 @@
         class="absolute w-full h-full top-0 left-0 flex items-center justify-center"
       >
         <div class="bg-white p-4 rounded">
-          <TForm
-            v-model="moving"
-            :fields="movingFields"
-            submit-label="Move"
-            show-cancel
-            @cancel="moveend()"
-            @save="moveend()"
-          />
+          <h4 class="font-bold text-lg mb-4">
+            Moving from {{ envelopes[draggingItem].label }} to
+            {{ envelopes[draggingTo].label }}
+          </h4>
+          <div class="p-2">
+            <div class="flex w-full items-top mb-6">
+              <div class="w-1/3 text-gray-700 font-bold text-right mb-0 pr-4">
+                <label for="amount">
+                  Amount
+                </label>
+              </div>
+              <input
+                ref="input"
+                v-model="moving"
+                v-focus
+                type="tel"
+                class="bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              />
+            </div>
+            <div class="flex w-full items-top mb-6">
+              <div class="w-1/3 block text-gray-700 font-bold text-right pr-4">
+                {{ envelopes[draggingItem].label }}
+              </div>
+              <div class="font-mono">
+                {{ envelopes[draggingItem].today - parseInt(moving || 0) }}
+              </div>
+            </div>
+            <div class="flex w-full items-top mb-6">
+              <div class="w-1/3 block text-gray-700 font-bold text-right pr-4">
+                {{ envelopes[draggingTo].label }}
+              </div>
+              <div class="font-mono">
+                {{ envelopes[draggingTo].today + parseInt(moving || 0) }}
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button class="p-2 px-4 underline" @click="moveend()">
+              Cancel
+            </button>
+            <button class="btn" @click="moveend()">Move</button>
+          </div>
         </div>
       </div>
     </template>
@@ -103,25 +137,16 @@
 <script>
 import TIcon from '~/components/TIcon'
 import THamburger from '~/components/THamburger'
-import TForm from '~/components/TForm'
 
 export default {
   layout: 'empty',
   transition: 'slide-down',
   components: {
     TIcon,
-    THamburger,
-    TForm
+    THamburger
   },
   data: () => ({
     moving: null,
-    movingFields: [
-      {
-        name: 'amount',
-        type: 'tel',
-        autocomplete: 'off'
-      }
-    ],
     isMenuOpen: false,
     isPointerShown: false,
     draggingItem: null,

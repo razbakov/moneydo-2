@@ -76,15 +76,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import TIcon from '~/components/TIcon'
 import { getDateTime } from '~/utils'
-
-Vue.directive('focus', {
-  inserted: (el) => {
-    el.focus()
-  }
-})
 
 export default {
   layout: 'empty',
