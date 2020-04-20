@@ -24,12 +24,14 @@
         </div>
       </div>
     </header>
-    <main class="p-2 overflow-y-scroll">
+    <main ref="expenses" class="p-2 overflow-y-scroll">
       <div
         v-for="(expense, expenseIndex) in expenses"
+        :id="`expense${expenseIndex}`"
         :key="expenseIndex"
-        class="flex border-dashed border-gray-500 border-b mb-2 justify-between items-center p-2"
+        class="flex cursor-pointer border-dashed border-gray-500 border-b mb-2 justify-between items-center p-2"
         :class="{ 'bg-yellow-200': expenseIndex === activeExpense }"
+        @click="editExpense(expenseIndex)"
       >
         <div>{{ getDateTime(expense.date) }}</div>
         <div class="font-mono">{{ expense.amount }}</div>
@@ -39,6 +41,7 @@
       class="fixed bottom-0 w-full h-24 bg-white rounded-t shadow-top p-2"
     >
       <input
+        ref="input"
         v-model="expenses[activeExpense].amount"
         v-focus
         type="number"
@@ -65,6 +68,14 @@ Vue.directive('focus', {
     el.focus()
   }
 })
+
+// function offset(el) {
+//   const rect = el.getBoundingClientRect()
+//   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
+//   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+//   return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+// }
 
 export default {
   layout: 'empty',
@@ -231,8 +242,20 @@ export default {
       return this.categories[this.$route.params.id]
     }
   },
+  mounted() {
+    this.$refs.expenses.scrollTop = 0
+  },
   methods: {
-    getDateTime
+    getDateTime,
+    editExpense(expenseIndex) {
+      this.activeExpense = expenseIndex
+
+      this.$nextTick(() => {
+        this.$refs.input.focus()
+        this.scrollToActive()
+      })
+    },
+    scrollToActive() {}
   }
 }
 </script>
