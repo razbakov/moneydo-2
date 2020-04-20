@@ -38,6 +38,7 @@
     >
       <input
         v-model="expenses[activeExpense].amount"
+        v-focus
         type="number"
         class="bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
       />
@@ -53,8 +54,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import TIcon from '~/components/TIcon'
 import { getDateTime } from '~/utils'
+
+Vue.directive('focus', {
+  inserted: (el) => {
+    el.focus()
+  }
+})
 
 export default {
   layout: 'empty',
