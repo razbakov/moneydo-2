@@ -7,15 +7,26 @@
       <div class="text-lg">March</div>
     </header>
     <main class="p-2">
+      <div
+        v-if="isPointerShown"
+        class="rounded-full w-6 h-6 bg-primary absolute"
+        :style="{ left: mouseLeft - 12 + 'px', top: mouseTop - 12 + 'px' }"
+      ></div>
       <div class="nav"></div>
       <h4 class="mb-1 font-bold text-xs text-gray-600">
         Budget
       </h4>
       <div class="grid grid-cols-4 gap-2">
         <div
-          v-for="envelope in envelopes"
+          v-for="(envelope, envelopeIndex) in envelopes"
           :key="envelope.label"
+          :class="{ 'bg-green-500': draggingTo === envelopeIndex }"
           class="p-2 bg-white rounded text-gray-600 shadow-top text-center"
+          draggable="true"
+          @dragstart="dragstart(envelopeIndex, $event)"
+          @dragend="dragend($event)"
+          @dragenter="dragenter(envelopeIndex, $event)"
+          @dragleave="dragleave(envelopeIndex, $event)"
         >
           <div class="text-lg font-bold font-mono text-green-500 leading-none">
             {{ envelope.today }}
@@ -77,6 +88,11 @@ export default {
   },
   data: () => ({
     isMenuOpen: false,
+    isPointerShown: false,
+    draggingItem: null,
+    draggingTo: null,
+    mouseLeft: 0,
+    mouseTop: 0,
     categories: [
       {
         label: 'Groceries',
@@ -133,6 +149,40 @@ export default {
         today: 9
       }
     ]
-  })
+  }),
+  methods: {
+    dragstart(item, e) {
+      this.draggingItem = item
+      e.target.style.opacity = 0.5
+      e.dataTransfer.setData('text/plain', 'dummy')
+    },
+    dragend(e) {
+      e.target.style.opacity = 1
+    },
+    dragenter(index, e) {
+      this.draggingTo = index
+    },
+    dragleave(item, e) {
+      this.draggingTo = null
+    },
+    listenToMouseMove(isActive) {
+      this.isPointerShown = isActive
+
+      if (!this.isPointerShown) {
+        document.onmousemove = () => {
+          return false
+        }
+      }
+
+      if (window.Event) {
+        document.captureEvents(Event.MOUSEMOVE)
+      }
+
+      document.onmousemove = (e) => {
+        this.mouseLeft = e.pageX
+        this.mouseTop = e.pageY
+      }
+    }
+  }
 }
 </script>
