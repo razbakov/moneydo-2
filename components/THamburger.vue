@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      class="hamburger hamburger--elastic"
+      class="hamburger hamburger--elastic outline-none focus:outline-none appearance-none"
       :class="{ 'is-active': value }"
       type="button"
       aria-label="Menu"

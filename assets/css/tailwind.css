@@ -3,6 +3,14 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  user-select: none;
+}
+
 .nuxt-link-exact-active {
   @apply font-bold;
 }

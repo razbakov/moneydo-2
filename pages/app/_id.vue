@@ -5,11 +5,11 @@
     <header
       class="sticky top-0 bg-dark text-white h-16 flex items-center shadow"
     >
-      <router-link to="/app/">
+      <router-link to="/app/" class="outline-none hover:opacity-75">
         <TIcon class="ml-2 w-10 p-2 text-white" name="close" />
       </router-link>
       <div
-        class="w-full mt-2 mr-2 cursor-pointer hover:bg-gray-200 rounded shadow mb-2 flex justify-between p-2"
+        class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2"
       >
         <div>
           <div class="text-lg text-white font-bold leading-tight">
@@ -38,6 +38,9 @@
         @click="editExpense(expenseIndex)"
       >
         <div>{{ getDateTime(expense.date) }}</div>
+        <div class="ml-2 mr-2 text-sm text-gray-900 flex-grow">
+          {{ expense.description }}
+        </div>
         <div class="font-mono">{{ expense.amount }}</div>
       </div>
     </main>
@@ -45,15 +48,24 @@
       v-if="showEditor"
       class="fixed bottom-0 w-full md:max-w-md h-24 bg-white rounded-t shadow-top p-2"
     >
-      <input
-        ref="input"
-        v-model="expenses[activeExpense].amount"
-        v-focus
-        type="number"
-        class="bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-      />
+      <div class="flex">
+        <input
+          ref="input"
+          v-model="expenses[activeExpense].amount"
+          v-focus
+          type="number"
+          class="w-1/3 mr-2 bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+        />
+        <input
+          ref="description"
+          v-model="expenses[activeExpense].description"
+          v-focus
+          type="text"
+          placeholder="Description (optional)"
+          class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+        />
+      </div>
       <div class="flex text-gray-800">
-        <TIcon class="p-2 w-10" name="notes" />
         <div class="flex items-center">
           <TIcon class="p-2 w-10" name="calendar" />
           Today
