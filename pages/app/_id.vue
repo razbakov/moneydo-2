@@ -24,7 +24,11 @@
         </div>
       </div>
     </header>
-    <main ref="expenses" class="p-2 overflow-y-scroll">
+    <main
+      ref="expenses"
+      class="p-2 overflow-y-scroll"
+      style="height: calc(100vh - 10rem)"
+    >
       <div
         v-for="(expense, expenseIndex) in expenses"
         :id="`expense${expenseIndex}`"
@@ -38,7 +42,8 @@
       </div>
     </main>
     <footer
-      class="fixed bottom-0 w-full h-24 bg-white rounded-t shadow-top p-2"
+      v-if="showEditor"
+      class="fixed bottom-0 w-full md:max-w-md h-24 bg-white rounded-t shadow-top p-2"
     >
       <input
         ref="input"
@@ -68,14 +73,6 @@ Vue.directive('focus', {
     el.focus()
   }
 })
-
-// function offset(el) {
-//   const rect = el.getBoundingClientRect()
-//   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
-//   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-
-//   return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-// }
 
 export default {
   layout: 'empty',
@@ -240,22 +237,44 @@ export default {
   computed: {
     category() {
       return this.categories[this.$route.params.id]
+    },
+    showEditor() {
+      return this.activeExpense !== -1
     }
   },
   mounted() {
-    this.$refs.expenses.scrollTop = 0
+    this.scrollToActive()
   },
   methods: {
     getDateTime,
     editExpense(expenseIndex) {
-      this.activeExpense = expenseIndex
+      if (this.activeExpense === expenseIndex) {
+        this.activeExpense = -1
+        return
+      }
 
       this.$nextTick(() => {
-        this.$refs.input.focus()
+        this.activeExpense = expenseIndex
+
+        if (this.$refs.input) {
+          this.$refs.input.focus()
+        }
+
         this.scrollToActive()
       })
     },
-    scrollToActive() {}
+    scrollToActive() {
+      if (!this.showEditor) {
+        return
+      }
+
+      this.$nextTick(() => {
+        document.getElementById(`expense${this.activeExpense}`).scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
+      })
+    }
   }
 }
 </script>
