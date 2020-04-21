@@ -11,8 +11,8 @@
     <div class="w-2/3">
       <slot>
         <input
-          ref="input"
           :id="elementId"
+          ref="input"
           v-bind="$attrs"
           :value.sync="value"
           class="w-full block bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
