@@ -13,6 +13,7 @@ export default {
    ** Headers of the page
    */
   head: {
+    title: meta.name,
     bodyAttrs: {
       class: 'bg-primary-light'
     },
