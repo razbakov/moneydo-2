@@ -24,7 +24,11 @@
         </div>
       </transition>
     </portal>
-    <main ref="expenses" class="p-2 overflow-y-scroll h-screen pb-64">
+    <main
+      ref="expenses"
+      class="p-2 overflow-y-scroll"
+      style="height: calc(100vh - 10rem)"
+    >
       <div
         v-for="(expense, expenseIndex) in expenses"
         :id="`expense${expenseIndex}`"
