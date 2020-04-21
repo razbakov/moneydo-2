@@ -51,7 +51,9 @@ export default {
     this.elementId = getId(this.label)
 
     if (this.autoFocus) {
-      this.$refs.input.focus()
+      this.$nextTick(() => {
+        this.$refs.input.focus()
+      })
     }
   },
   methods: {
