@@ -71,7 +71,8 @@ export default {
   pwa: {
     meta: {
       name,
-      description
+      description,
+      twitterSite: '@MoneyDoApp'
     }
   },
   /*
