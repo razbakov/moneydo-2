@@ -1,10 +1,13 @@
+const name = 'MoneyDo'
+const description = 'Budget Planner and Expense Tracker'
+
 export default {
   mode: 'spa',
   /*
    ** Headers of the page
    */
   head: {
-    title: 'MoneyDo',
+    title: name,
     bodyAttrs: {
       class: 'bg-primary-light'
     },
@@ -14,7 +17,12 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
+        content: description
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: '/cover.png'
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
@@ -22,7 +30,7 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#2a1b3c' },
   /*
    ** Global CSS
    */
@@ -62,8 +70,8 @@ export default {
   ],
   pwa: {
     meta: {
-      name: 'MoneyDo',
-      description: 'Budget Planner and Expense Tracker'
+      name,
+      description
     }
   },
   /*
