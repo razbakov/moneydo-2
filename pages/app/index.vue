@@ -89,13 +89,7 @@
       "
       @close="moveend()"
     >
-      <TField
-        ref="input"
-        v-model="movingAmount"
-        v-focus
-        label="Amount"
-        type="tel"
-      />
+      <TField v-model="movingAmount" auto-focus label="Amount" type="tel" />
       <TField :label="envelopes[draggingItem].label">
         <div class="font-mono">
           {{ envelopes[draggingItem].today - parseInt(movingAmount || 0) }}

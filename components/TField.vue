@@ -11,6 +11,7 @@
     <div class="w-2/3">
       <slot>
         <input
+          ref="input"
           :id="elementId"
           v-bind="$attrs"
           :value.sync="value"
@@ -37,6 +38,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    autoFocus: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -44,6 +49,10 @@ export default {
   }),
   mounted() {
     this.elementId = getId(this.label)
+
+    if (this.autoFocus) {
+      this.$refs.input.focus()
+    }
   },
   methods: {
     input(event) {
