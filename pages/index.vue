@@ -9,12 +9,12 @@
           Simple. Fast. Smart.
         </p>
         <div class="flex justify-center mt-3 p-4 w-full md:flex">
-          <nuxt-link v-if="!uid" to="/signup" class="block btn m-2">
+          <TButton v-if="!uid" type="primary" to="/signup">
             Start for free
-          </nuxt-link>
-          <nuxt-link v-else to="/account" class="block btn m-2">
+          </TButton>
+          <TButton v-else type="primary" to="/account">
             Go to my Account
-          </nuxt-link>
+          </TButton>
         </div>
       </div>
     </main>
@@ -26,8 +26,12 @@
 
 <script>
 import useAuth from '~/use/auth'
+import TButton from '~/components/TButton'
 
 export default {
+  components: {
+    TButton
+  },
   setup() {
     const { uid } = useAuth()
 
