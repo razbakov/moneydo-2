@@ -87,16 +87,23 @@
       :title="
         `Moving from ${envelopes[draggingItem].label} to ${envelopes[draggingTo].label}`
       "
+      @close="moveend()"
     >
-      <TField ref="input" v-model="moving" v-focus label="Amount" type="tel" />
+      <TField
+        ref="input"
+        v-model="movingAmount"
+        v-focus
+        label="Amount"
+        type="tel"
+      />
       <TField :label="envelopes[draggingItem].label">
         <div class="font-mono">
-          {{ envelopes[draggingItem].today - parseInt(moving || 0) }}
+          {{ envelopes[draggingItem].today - parseInt(movingAmount || 0) }}
         </div>
       </TField>
       <TField :label="envelopes[draggingTo].label">
         <div class="font-mono">
-          {{ envelopes[draggingTo].today + parseInt(moving || 0) }}
+          {{ envelopes[draggingTo].today + parseInt(movingAmount || 0) }}
         </div>
       </TField>
       <div class="flex justify-end">
@@ -107,6 +114,7 @@
     <TPopup
       v-if="editingCategory !== -1"
       :title="categories[editingCategory] ? 'Edit Cateogry' : 'Add Category'"
+      @close="editingCategory = -1"
     >
       <TField
         v-model="categories[editingCategory].label"
@@ -160,7 +168,7 @@ export default {
   },
   data: () => ({
     category: {},
-    moving: null,
+    movingAmount: null,
     editingCategory: -1,
     isMenuOpen: false,
     isPointerShown: false,
@@ -226,6 +234,11 @@ export default {
       }
     ]
   }),
+  watch: {
+    isMovingEditorShown() {
+      this.movingAmount = null
+    }
+  },
   methods: {
     addCategory() {
       const length = this.categories.push({})
