@@ -83,9 +83,9 @@
         class="absolute w-full h-full top-0 left-0 bg-black opacity-50"
       ></div>
       <div
-        class="absolute w-full h-full top-0 left-0 flex items-center justify-center"
+        class="absolute w-full h-full top-0 left-0 flex items-end md:items-center justify-center"
       >
-        <div class="bg-white p-4 rounded">
+        <div class="bg-white p-4 rounded w-full md:w-auto">
           <h4 class="font-bold text-lg mb-4">
             Moving from {{ envelopes[draggingItem].label }} to
             {{ envelopes[draggingTo].label }}
@@ -211,6 +211,16 @@ export default {
       }
     ]
   }),
+  watch: {
+    isMovingEditorShown(val) {
+      const el = document.getElementsByTagName('body')[0]
+      if (val) {
+        el.classList.add('overflow-y-hidden')
+      } else {
+        el.classList.remove('overflow-y-hidden')
+      }
+    }
+  },
   methods: {
     moveend() {
       this.isMovingEditorShown = false
