@@ -65,7 +65,10 @@ export default {
     meta,
     manifest: {
       name: meta.name,
-      lang: 'end'
+      short_name: meta.name,
+      start_url: '/app/?standalone=true',
+      background_color: '#ece3f7',
+      lang: 'en'
     }
   },
   /*
