@@ -46,7 +46,7 @@
     </main>
     <footer
       v-if="showEditor"
-      class="fixed bottom-0 w-full md:max-w-md h-24 bg-white rounded-t shadow-top p-2"
+      class="fixed bottom-0 w-full md:max-w-md bg-white rounded-t shadow-top p-2"
     >
       <div class="flex">
         <input
@@ -65,16 +65,23 @@
         />
       </div>
       <div class="flex text-gray-800">
-        <div class="flex items-center">
+        <div
+          class="flex items-center cursor-pointer"
+          @click="selectDate = true"
+        >
           <TIcon class="p-2 w-10" name="calendar" />
-          Today
+          {{ getDateTime(expenses[activeExpense].date) }}
         </div>
+      </div>
+      <div v-if="selectDate" class="flex justify-center">
+        <VDatePicker v-model="expenses[activeExpense].date" is-inline />
       </div>
     </footer>
   </div>
 </template>
 
 <script>
+import VDatePicker from 'v-calendar/lib/components/date-picker.umd'
 import TIcon from '~/components/TIcon'
 import { getDateTime } from '~/utils'
 
@@ -82,9 +89,11 @@ export default {
   layout: 'app',
   transition: 'slide-up',
   components: {
-    TIcon
+    TIcon,
+    VDatePicker
   },
   data: () => ({
+    selectDate: false,
     isMenuOpen: false,
     activeExpense: 0,
     expenses: [
