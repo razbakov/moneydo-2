@@ -8,7 +8,7 @@
     <portal to="title">
       <transition appear name="slide-up">
         <div
-          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2"
+          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2 pl-1"
         >
           <div>
             <div class="text-lg text-white font-bold leading-tight">
@@ -89,7 +89,6 @@ import { getDateTime } from '~/utils'
 
 export default {
   layout: 'app',
-  transition: 'slide-up',
   components: {
     TIcon,
     VDatePicker

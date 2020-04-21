@@ -258,6 +258,11 @@ export default {
       e.dataTransfer.setData('text/plain', 'dummy')
     },
     dragend(e) {
+      if (this.draggingItem === this.draggingTo) {
+        this.moveend()
+        return
+      }
+
       this.isMovingEditorShown = true
     },
     dragenter(index, e) {

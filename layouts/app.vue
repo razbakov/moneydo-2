@@ -3,7 +3,7 @@
     class="container mx-auto md:max-w-md md:shadow-lg md:my-4 md:border border-primary md:rounded"
   >
     <header
-      class="sticky top-0 bg-dark text-white font-bold h-16 flex items-center shadow z-10 w-full"
+      class="sticky overflow-hidden top-0 bg-dark text-white font-bold h-16 flex items-center shadow z-10 w-full"
     >
       <portal-target name="nav">
         <THamburger v-model="isMenuOpen" class="pt-1" />
@@ -26,7 +26,9 @@
         <TButton type="nav" @click="signOut">Logout</TButton>
       </nav>
     </transition>
-    <nuxt />
+    <div class="overflow-hidden">
+      <nuxt />
+    </div>
   </div>
 </template>
 
