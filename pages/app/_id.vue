@@ -263,6 +263,8 @@ export default {
   methods: {
     getDateTime,
     editExpense(expenseIndex) {
+      this.selectDate = false
+
       if (this.activeExpense === expenseIndex) {
         this.activeExpense = -1
         return
