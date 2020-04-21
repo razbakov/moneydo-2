@@ -62,7 +62,11 @@ export default {
     'portal-vue/nuxt'
   ],
   pwa: {
-    meta
+    meta,
+    manifest: {
+      name: meta.name,
+      lang: 'end'
+    }
   },
   /*
    ** Build configuration
