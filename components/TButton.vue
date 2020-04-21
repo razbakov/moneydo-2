@@ -23,20 +23,32 @@ export default {
     type: {
       type: String,
       default: 'primary'
+    },
+    color: {
+      type: String,
+      default: ''
     }
   },
   computed: {
     classes() {
       const map = {
-        primary: 'btn',
+        primary:
+          'bg-primary no-underline text-white font-semibold py-2 px-4 rounded hover:text-white hover:bg-dark',
         base:
           'bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow',
-        secondary: 'btn-secondary',
+        secondary:
+          'bg-transparent text-primary font-semibold py-2 px-4 border border-primary rounded no-underline hover:bg-primary hover:text-white hover:border-transparent',
         link: 'underline font-semibold py-2 px-4 hover:no-underline',
         nav: 'block font-semibold py-2 px-4'
       }
 
-      return map[this.type]
+      let classes = map[this.type]
+
+      if (this.color) {
+        classes += ` text-${this.color} border-${this.color} hover:bg-${this.color} hover:text-white`
+      }
+
+      return classes
     }
   }
 }

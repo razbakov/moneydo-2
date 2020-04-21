@@ -133,11 +133,16 @@
           'store'
         ]"
       />
-      <div class="flex justify-end">
-        <TButton type="link" @click="editingCategory = -1">Cancel</TButton>
-        <TButton type="primary" @click="editingCategory = -1">{{
-          categories[editingCategory] ? 'Save' : 'Add'
-        }}</TButton>
+      <div class="flex justify-between">
+        <TButton type="secondary" color="red-500" @click="editingCategory = -1"
+          >Delete</TButton
+        >
+        <div class="flex justify-end">
+          <TButton type="link" @click="editingCategory = -1">Cancel</TButton>
+          <TButton type="primary" @click="editingCategory = -1">{{
+            categories[editingCategory] ? 'Save' : 'Add'
+          }}</TButton>
+        </div>
       </div>
     </TPopup>
   </main>

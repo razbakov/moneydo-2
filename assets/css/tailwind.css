@@ -1,7 +1,5 @@
 /* purgecss start ignore */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
 
 html {
   scroll-behavior: smooth;
@@ -12,28 +10,10 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+@tailwind components;
+
 .nuxt-link-exact-active {
   @apply font-bold;
-}
-
-.typo .btn,
-.btn {
-  @apply bg-primary no-underline text-white font-semibold py-2 px-4 rounded;
-}
-
-.typo .btn:hover,
-.btn:hover {
-  @apply shadow text-white bg-red-700;
-}
-
-.typo .btn-secondary,
-.btn-secondary {
-  @apply bg-transparent text-primary font-semibold py-2 px-4 border border-primary rounded no-underline;
-}
-
-.typo .btn-secondary:hover,
-.btn-secondary:hover {
-  @apply bg-primary text-white border-transparent;
 }
 
 .hero {
@@ -102,5 +82,7 @@ body {
   width: 100%;
   z-index: -1;
 }
+
+@tailwind utilities;
 
 /* purgecss end ignore */
