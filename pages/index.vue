@@ -12,8 +12,8 @@
           <TButton v-if="!uid" type="primary" to="/signup">
             Start for free
           </TButton>
-          <TButton v-else type="primary" to="/account">
-            Go to my Account
+          <TButton v-else type="primary" to="/app/">
+            Go to Dashboard
           </TButton>
         </div>
       </div>
