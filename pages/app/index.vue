@@ -45,16 +45,19 @@
       <router-link
         v-for="(category, categoryIndex) in categories"
         :key="category.label"
+        v-long-press="300"
         :to="`/app/${categoryIndex}`"
+        @long-press-start="editingCategory = categoryIndex"
       >
         <div
           class="bg-white cursor-pointer hover:bg-gray-200 rounded shadow mb-2 flex justify-between p-2"
         >
           <div class="flex">
-            <TIcon
-              class="flex items-center text-primary justify-center ml-2 mr-4"
-              :name="category.icon"
-            />
+            <div
+              class="w-6 ml-2 mr-4 flex items-center text-primary justify-center"
+            >
+              <TIcon v-if="category.icon" :name="category.icon" />
+            </div>
             <div>
               <div class="text-lg text-black font-bold leading-tight">
                 {{ category.label }}
@@ -65,14 +68,14 @@
             </div>
           </div>
           <div class="font-mono text-black text-lg items-center flex">
-            {{ category.total }}
+            {{ category.total || 0 }}
           </div>
         </div>
       </router-link>
 
       <div
         class="bg-white cursor-pointer hover:bg-gray-200 rounded shadow mb-2 flex items-center text-gray-600 p-2"
-        @click="editingCategory = 1"
+        @click="addCategory"
       >
         <div class="w-6 ml-2 mr-4 text-3xl leading-none text-center">+</div>
         <div class="text-xs font-bold leading-none">
@@ -102,16 +105,38 @@
         <TButton type="primary" @click="moveend()">Move</TButton>
       </div>
     </TPopup>
-    <TPopup v-if="editingCategory" title="Add Category">
-      <TField v-model="category.label" v-focus label="Name" />
+    <TPopup
+      v-if="editingCategory"
+      :title="categories[editingCategory] ? 'Edit Cateogry' : 'Add Category'"
+    >
+      <TField
+        v-model="categories[editingCategory].label"
+        v-focus
+        label="Name"
+      />
       <TSelect
-        v-model="category.envelope"
+        v-model="categories[editingCategory].envelope"
         label="Envelope"
         :options="envelopes.map((e) => e.label)"
       />
+      <TSelect
+        v-model="categories[editingCategory].icon"
+        label="Icon"
+        :options="[
+          'car',
+          'coffee',
+          'fridge',
+          'house',
+          'lobby',
+          'notes',
+          'store'
+        ]"
+      />
       <div class="flex justify-end">
         <TButton type="link" @click="editingCategory = null">Cancel</TButton>
-        <TButton type="primary" @click="editingCategory = null">Add</TButton>
+        <TButton type="primary" @click="editingCategory = null">{{
+          categories[editingCategory] ? 'Save' : 'Add'
+        }}</TButton>
       </div>
     </TPopup>
   </main>
@@ -203,6 +228,10 @@ export default {
     ]
   }),
   methods: {
+    addCategory() {
+      const length = this.categories.push({})
+      this.editingCategory = length - 1
+    },
     moveend() {
       this.isMovingEditorShown = false
       this.draggingItem = null
