@@ -4,8 +4,7 @@ const meta = {
   twitterSite: '@MoneyDoApp',
   ogHost: 'https://moneydo.netlify.app',
   ogImage: '/cover/wide.png',
-  viewport:
-    'user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1'
+  nativeUI: true
 }
 
 export default {

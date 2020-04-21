@@ -7,7 +7,7 @@
         to="/"
         class="no-underline flex items-center justify-center leading-none hover:no-underline text-4xl"
       >
-        <img class="h-10" src="/icons/icon.svg" alt="MoneyDo" />
+        <img class="h-10" src="/icon.svg" alt="MoneyDo" />
         <span class="ml-2 font-normal text-lg">
           MoneyDo
         </span>
