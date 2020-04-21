@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="absolute w-full h-full top-0 left-0 bg-black opacity-50 z-40"
+      class="fixed w-full h-full top-0 left-0 bg-black opacity-50 z-40"
     ></div>
 
     <div
