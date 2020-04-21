@@ -19,7 +19,7 @@
     <transition name="slide">
       <nav
         v-if="isMenuOpen"
-        class="text-lg absolute left-0 w-3/4 md:w-1/4 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
+        class="text-lg absolute left-0 w-3/4 md:w-1/4 bottom-0 top-0 bg-dark text-white z-30 shadow-lg p-4"
       >
         <TButton type="nav" to="/app/">Dasboard</TButton>
         <TButton type="nav" to="/account">Account</TButton>

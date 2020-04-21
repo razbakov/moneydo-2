@@ -1,10 +1,15 @@
-const meta = {
+const app = {
   name: 'MoneyDo',
   description: 'Budget Planner and Expense Tracker',
-  twitterSite: '@MoneyDoApp',
-  ogHost: 'https://moneydo.netlify.app',
-  ogImage: '/cover/wide.png',
-  nativeUI: true
+  social: {
+    twitter: 'MoneyDoApp',
+    instagram: '',
+    facebook: '',
+    slack: ''
+  },
+  nav: [],
+  url: process.env.BASE_URL,
+  cover: '/cover/wide.png'
 }
 
 export default {
@@ -13,7 +18,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: meta.name,
+    title: app.name,
     bodyAttrs: {
       class: 'bg-primary-light'
     },
@@ -62,10 +67,17 @@ export default {
     'portal-vue/nuxt'
   ],
   pwa: {
-    meta,
+    meta: {
+      name: app.name,
+      description: app.description,
+      ogHost: app.url,
+      ogImage: app.cover,
+      nativeUI: true,
+      twitterSite: '@' + app.social.twitter
+    },
     manifest: {
-      name: meta.name,
-      short_name: meta.name,
+      name: app.name,
+      short_name: app.name,
       start_url: '/app/?standalone=true',
       background_color: '#ece3f7',
       lang: 'en'
@@ -102,6 +114,7 @@ export default {
     routes: ['/', '/signup/']
   },
   env: {
+    app,
     firebase: {
       config: {
         apiKey: 'AIzaSyDBOZ-MPQsPDG4TDe6b1PAE14hTy2iV5k8',

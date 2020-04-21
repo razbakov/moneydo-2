@@ -102,17 +102,18 @@
       {{ error.message }}
     </div>
     <div class="flex justify-end">
-      <button
+      <TButton
         v-if="showRemove"
-        class="p-2 px-4 underline text-red-500"
+        type="secondary"
+        color="red-500"
         @click="remove"
       >
         Delete
-      </button>
-      <button v-if="showCancel" class="p-2 px-4 underline" @click="cancel">
+      </TButton>
+      <TButton v-if="showCancel" type="link" @click="cancel">
         Cancel
-      </button>
-      <button class="btn" @click="save">{{ submitLabel }}</button>
+      </TButton>
+      <TButton type="primary" @click="save">{{ submitLabel }}</TButton>
     </div>
   </div>
 </template>
@@ -120,6 +121,7 @@
 <script>
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/markdown/markdown.js'
+import TButton from '~/components/TButton'
 
 const camelcase = (text) => {
   const result = text.replace(/([A-Z])/g, ' $1')
@@ -129,7 +131,8 @@ const camelcase = (text) => {
 
 export default {
   components: {
-    codemirror
+    codemirror,
+    TButton
   },
   props: {
     fields: {
