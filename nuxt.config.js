@@ -1,5 +1,10 @@
-const name = 'MoneyDo'
-const description = 'Budget Planner and Expense Tracker'
+const meta = {
+  name: 'MoneyDo',
+  description: 'Budget Planner and Expense Tracker',
+  twitterSite: '@MoneyDoApp',
+  ogHost: 'https://moneydo.netlify.app',
+  ogImage: '/cover.png'
+}
 
 export default {
   mode: 'spa',
@@ -7,24 +12,9 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: name,
     bodyAttrs: {
       class: 'bg-primary-light'
     },
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: description
-      },
-      {
-        hid: 'og:image',
-        property: 'og:image',
-        content: '/cover.png'
-      }
-    ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
@@ -69,11 +59,7 @@ export default {
     '@nuxtjs/sentry'
   ],
   pwa: {
-    meta: {
-      name,
-      description,
-      twitterSite: '@MoneyDoApp'
-    }
+    meta
   },
   /*
    ** Build configuration
