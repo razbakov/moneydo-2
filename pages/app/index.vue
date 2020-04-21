@@ -45,9 +45,8 @@
       <router-link
         v-for="(category, categoryIndex) in categories"
         :key="category.label"
-        v-long-press="300"
+        v-touch:touchhold="editCategory(categoryIndex)"
         :to="`/app/${categoryIndex}`"
-        @long-press-start="editingCategory = categoryIndex"
       >
         <div
           class="bg-white cursor-pointer hover:bg-gray-200 rounded shadow mb-2 flex justify-between p-2"
@@ -106,7 +105,7 @@
       </div>
     </TPopup>
     <TPopup
-      v-if="editingCategory"
+      v-if="editingCategory !== -1"
       :title="categories[editingCategory] ? 'Edit Cateogry' : 'Add Category'"
     >
       <TField
@@ -133,8 +132,8 @@
         ]"
       />
       <div class="flex justify-end">
-        <TButton type="link" @click="editingCategory = null">Cancel</TButton>
-        <TButton type="primary" @click="editingCategory = null">{{
+        <TButton type="link" @click="editingCategory = -1">Cancel</TButton>
+        <TButton type="primary" @click="editingCategory = -1">{{
           categories[editingCategory] ? 'Save' : 'Add'
         }}</TButton>
       </div>
@@ -162,7 +161,7 @@ export default {
   data: () => ({
     category: {},
     moving: null,
-    editingCategory: null,
+    editingCategory: -1,
     isMenuOpen: false,
     isPointerShown: false,
     draggingItem: null,
@@ -231,6 +230,11 @@ export default {
     addCategory() {
       const length = this.categories.push({})
       this.editingCategory = length - 1
+    },
+    editCategory(categoryIndex) {
+      return () => {
+        this.editingCategory = categoryIndex
+      }
     },
     moveend() {
       this.isMovingEditorShown = false
