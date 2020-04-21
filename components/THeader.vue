@@ -1,16 +1,19 @@
 <template>
   <header>
-    <nav class="flex items-center text-dark justify-between flex-wrap p-6">
-      <div class="sm:flex mb-4">
-        <router-link
-          to="/"
-          class="no-underline leading-none hover:no-underline font-extrabold text-4xl"
-        >
-          <img class="h-10" src="/img/logo.svg" alt="MoneyDo" />
-        </router-link>
-      </div>
+    <nav
+      class="flex items-center bg-dark text-white justify-between flex-wrap p-6"
+    >
+      <router-link
+        to="/"
+        class="no-underline flex items-center justify-center leading-none hover:no-underline text-4xl"
+      >
+        <img class="h-10" src="/icons/icon.svg" alt="MoneyDo" />
+        <span class="ml-2 font-normal text-lg">
+          MoneyDo
+        </span>
+      </router-link>
       <ul
-        class="md:flex text-lg fixed left-0 right-0 bottom-0 top-0 md:relative bg-light md:bg-transparent"
+        class="md:flex text-lg fixed left-0 right-0 bottom-0 top-0 md:relative bg-dark text-white md:bg-transparent z-30"
         :class="{ hidden: !isMenuOpen }"
       >
         <li v-for="item in nav" :key="item.link">
@@ -31,7 +34,7 @@
         </li>
         <li v-if="!uid">
           <router-link
-            class="mr-2 md:px-4 md:py-2 p-4 w-full block text-primary"
+            class="mr-2 md:px-4 md:py-2 p-4 w-full block"
             to="/signup"
             exact
             >Sign in</router-link
@@ -42,18 +45,7 @@
         class="right-0 top-0 mr-5 mt-5 md:hidden z-50"
         :class="isMenuOpen ? 'fixed' : 'absolute'"
       >
-        <button
-          class="hamburger hamburger--elastic"
-          :class="{ 'is-active': isMenuOpen }"
-          type="button"
-          aria-label="Menu"
-          aria-controls="navigation"
-          @click="isMenuOpen = !isMenuOpen"
-        >
-          <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-          </span>
-        </button>
+        <THamburger v-model="isMenuOpen" />
       </div>
     </nav>
   </header>
@@ -61,8 +53,12 @@
 
 <script>
 import useAuth from '~/use/auth'
+import THamburger from '~/components/THamburger'
 
 export default {
+  components: {
+    THamburger
+  },
   data: () => ({
     isMenuOpen: false,
     title: 'Guten Abend',

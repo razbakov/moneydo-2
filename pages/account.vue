@@ -1,11 +1,9 @@
 <template>
   <TLoader v-if="loading" />
-  <main v-else class="card">
-    <div class="mb-4 bg-dark text-white -mt-2 -mx-8 p-4">
-      <h1 class="text-lg font-bold">
-        Your Account
-      </h1>
-    </div>
+  <main v-else class="p-4 bg-white">
+    <portal to="title">
+      <div class="text-lg">Your Account</div>
+    </portal>
 
     <TForm
       v-model="account"
@@ -13,12 +11,6 @@
       :submit-label="`${confirmedAccount ? 'Save' : 'Confirm'}`"
       @save="save"
     />
-
-    <div class="border-t p-4 bg-indigo-100 -mx-8 mt-4 -mb-8">
-      <button class="btn-secondary" @click="signOut">
-        Logout
-      </button>
-    </div>
   </main>
 </template>
 
@@ -29,6 +21,7 @@ import TLoader from '~/components/TLoader'
 
 export default {
   middleware: ['auth'],
+  layout: 'app',
   components: {
     TForm,
     TLoader

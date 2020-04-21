@@ -9,6 +9,7 @@ html {
 
 body {
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nuxt-link-exact-active {

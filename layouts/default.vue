@@ -3,9 +3,7 @@
     class="font-sans leading-normal tracking-normal antialiased min-h-screen"
   >
     <THeader />
-    <div class="container w-full mx-auto md:max-w-xl min-h-screen">
-      <nuxt />
-    </div>
+    <nuxt />
     <footer
       class="md:flex text-center p-4 text-white bg-dark justify-end items-center"
     >

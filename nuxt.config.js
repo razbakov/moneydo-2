@@ -56,7 +56,8 @@ export default {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/sentry'
+    '@nuxtjs/sentry',
+    'portal-vue/nuxt'
   ],
   pwa: {
     meta

@@ -20,7 +20,7 @@ const state = Vue.observable({
 })
 
 export default () => {
-  const router = useRouter()
+  const { router } = useRouter()
 
   let isAdmin = false
 

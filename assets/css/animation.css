@@ -3,8 +3,21 @@
   animation: slide-up 0.2s;
 }
 
+.zoom-enter-active {
+  animation: zoom 0.2s;
+}
+
 .slide-down-enter-active {
   animation: slide-down 0.2s;
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
 }
 
 @keyframes slide-up {
@@ -23,6 +36,17 @@
   100% {
     transform: translate(0, 0);
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.2s ease;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateX(-100%);
+  transition: all 150ms ease-in 0s;
 }
 
 /* purgecss end ignore */

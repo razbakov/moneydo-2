@@ -1,29 +1,29 @@
 <template>
-  <div
-    class="container mx-auto md:max-w-md md:shadow-lg md:my-4 md:border border-primary md:rounded"
-  >
-    <header
-      class="sticky top-0 bg-dark text-white h-16 flex items-center shadow"
-    >
+  <div>
+    <portal to="nav">
       <router-link to="/app/" class="outline-none hover:opacity-75">
         <TIcon class="ml-2 w-10 p-2 text-white" name="close" />
       </router-link>
-      <div
-        class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2"
-      >
-        <div>
-          <div class="text-lg text-white font-bold leading-tight">
-            {{ category.label }}
+    </portal>
+    <portal to="title">
+      <transition appear name="slide-up">
+        <div
+          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2"
+        >
+          <div>
+            <div class="text-lg text-white font-bold leading-tight">
+              {{ category.label }}
+            </div>
+            <div class="text-xs text-gray-400 leading-none">
+              {{ category.envelope }}
+            </div>
           </div>
-          <div class="text-xs text-gray-400 leading-none">
-            {{ category.envelope }}
+          <div class="font-mono text-white text-lg items-center flex mr-2">
+            {{ category.total }}
           </div>
         </div>
-        <div class="font-mono text-white text-lg items-center flex">
-          {{ category.total }}
-        </div>
-      </div>
-    </header>
+      </transition>
+    </portal>
     <main
       ref="expenses"
       class="p-2 overflow-y-scroll"
@@ -79,7 +79,7 @@ import TIcon from '~/components/TIcon'
 import { getDateTime } from '~/utils'
 
 export default {
-  layout: 'empty',
+  layout: 'app',
   transition: 'slide-up',
   components: {
     TIcon
