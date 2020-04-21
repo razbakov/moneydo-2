@@ -3,7 +3,7 @@ const meta = {
   description: 'Budget Planner and Expense Tracker',
   twitterSite: '@MoneyDoApp',
   ogHost: 'https://moneydo.netlify.app',
-  ogImage: '/cover.png'
+  ogImage: '/cover/wide.png'
 }
 
 export default {
