@@ -8,3 +8,7 @@ Vue.directive('focus', {
 })
 
 Vue.directive('long-press', LongPress)
+
+document.oncontextmenu = () => {
+  return false
+}
