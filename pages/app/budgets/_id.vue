@@ -10,12 +10,7 @@
         label="Budget Name"
         label-position="top"
       />
-      <TField
-        v-model="total"
-        auto-focus
-        label="Leftover"
-        label-position="top"
-      />
+      <TField v-model="total" label="Leftover" label-position="top" />
     </div>
     <div class="my-6">
       <details class="mx-2">
@@ -54,7 +49,6 @@
       v-for="envelope in envelopes"
       :key="envelope.label"
       v-model="envelope.today"
-      auto-focus
       :label="envelope.label"
       :description="envelope.description"
       class="mb-2 rounded border p-2"
