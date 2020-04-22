@@ -5,11 +5,6 @@
         <div class="text-lg">March</div>
       </transition>
     </portal>
-    <div
-      v-if="isPointerShown"
-      class="rounded-full w-6 h-6 bg-primary absolute"
-      :style="{ left: mouseLeft - 12 + 'px', top: mouseTop - 12 + 'px' }"
-    ></div>
     <h4 class="mb-1 font-bold text-xs text-gray-600">
       Budget
     </h4>
@@ -30,13 +25,26 @@
         @dragover.prevent
       >
         <div class="text-lg font-bold font-mono text-green-500 leading-none">
-          {{ envelope.today }}
+          {{ envelope.today }}€
         </div>
         <div class="text-xs text-gray-600">
           {{ envelope.label }}
         </div>
       </div>
     </div>
+    <transition appear name="zoom-in-out">
+      <div
+        v-if="showWinner"
+        class="text-center text-primary rounded bg-white p-4 shadow my-2"
+      >
+        <img class="inline-block" src="/svg/piggy.svg" alt="Savings" />
+        <div class="text-3xl mt-2 leading-tight">You saved 17€</div>
+        <div>since your last visit 2 days ago</div>
+        <TButton type="primary" class="mt-2" @click="showWinner = false"
+          >Yeah!</TButton
+        >
+      </div>
+    </transition>
     <div class="mt-2">
       <h4 class="mb-1 font-bold text-xs text-gray-600">
         Expenses by Category
@@ -67,7 +75,7 @@
             </div>
           </div>
           <div class="font-mono text-black text-lg items-center flex">
-            {{ category.total || 0 }}
+            {{ category.total || 0 }}€
           </div>
         </div>
       </router-link>
@@ -175,6 +183,7 @@ export default {
     TButton
   },
   data: () => ({
+    showWinner: true,
     category: {},
     movingAmount: null,
     editingCategory: -1,
