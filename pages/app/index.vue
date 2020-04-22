@@ -11,6 +11,7 @@
     <div class="grid grid-cols-4 gap-2">
       <div
         v-for="(envelope, envelopeIndex) in envelopes"
+        :id="`envelope-${envelope.label}`"
         :key="envelope.label"
         :class="{
           'bg-gray-200': draggingTo === envelopeIndex,
@@ -54,6 +55,7 @@
 
       <router-link
         v-for="(category, categoryIndex) in categories"
+        :id="`category-${category.label}`"
         :key="category.label"
         v-touch:touchhold="editCategory(categoryIndex)"
         :to="`/app/${categoryIndex}`"
@@ -164,6 +166,7 @@
         </div>
       </div>
     </TPopup>
+    <v-tour name="dashboard" :steps="steps"></v-tour>
   </main>
 </template>
 
@@ -185,7 +188,21 @@ export default {
     TButton
   },
   data: () => ({
-    showWinner: true,
+    steps: [
+      {
+        target: '#envelope-Needs',
+        content: 'Tap and hold an envelope and drop onto another to move money'
+      },
+      {
+        target: '#category-Groceries',
+        content: 'Tap and hold to edit category'
+      },
+      {
+        target: '#category-Cofee',
+        content: 'Click category to add an expense'
+      }
+    ],
+    showWinner: false,
     category: {},
     movingAmount: null,
     editingCategory: -1,
@@ -257,6 +274,9 @@ export default {
     isMovingEditorShown() {
       this.movingAmount = null
     }
+  },
+  mounted() {
+    this.$tours.dashboard.start()
   },
   methods: {
     addCategory() {
