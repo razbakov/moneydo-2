@@ -7,6 +7,6 @@ export default async ({ route, redirect }) => {
 
   if (!confirmedAccount.value) {
     window.localStorage.setItem('target', route.fullPath)
-    redirect('/account')
+    redirect('/app/account')
   }
 }

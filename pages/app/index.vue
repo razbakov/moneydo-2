@@ -89,18 +89,24 @@
       "
       @close="moveend()"
     >
-      <TField v-model="movingAmount" auto-focus label="Amount" type="tel" />
+      <TField
+        v-model="movingAmount"
+        auto-focus
+        label="Amount"
+        type="tel"
+        class="mb-6"
+      />
       <TField :label="envelopes[draggingItem].label">
         <div class="font-mono">
           {{ envelopes[draggingItem].today - parseInt(movingAmount || 0) }}
         </div>
       </TField>
-      <TField :label="envelopes[draggingTo].label">
+      <TField :label="envelopes[draggingTo].label" class="mt-2">
         <div class="font-mono">
           {{ envelopes[draggingTo].today + parseInt(movingAmount || 0) }}
         </div>
       </TField>
-      <div class="flex justify-end">
+      <div class="flex justify-end mt-6">
         <TButton type="link" @click="moveend()">Cancel</TButton>
         <TButton type="primary" @click="moveend()">Move</TButton>
       </div>
@@ -114,11 +120,13 @@
         v-model="categories[editingCategory].label"
         v-focus
         label="Name"
+        class="mb-6"
       />
       <TSelect
         v-model="categories[editingCategory].envelope"
-        label="Envelope"
         :options="envelopes.map((e) => e.label)"
+        label="Envelope"
+        class="mb-6"
       />
       <TSelect
         v-model="categories[editingCategory].icon"
@@ -132,6 +140,7 @@
           'notes',
           'store'
         ]"
+        class="mb-6"
       />
       <div class="flex justify-between">
         <TButton type="secondary" color="red-500" @click="editingCategory = -1"

@@ -1,14 +1,11 @@
 <template>
-  <div class="flex w-full justify-start items-top mb-6">
-    <div
-      v-if="label"
-      class="w-1/3 text-gray-700 font-bold text-right mb-0 pr-4"
-    >
+  <div :class="wrapperClasses" class="w-full justify-start items-top">
+    <div v-if="label" :class="labelClasses" class="text-gray-700 font-bold">
       <label :for="elementId">
         {{ label }}
       </label>
     </div>
-    <div class="w-2/3">
+    <div :class="inputWrapperClasses">
       <slot>
         <input
           :id="elementId"
@@ -16,6 +13,7 @@
           v-bind="$attrs"
           autocomplete="off"
           :value.sync="value"
+          :class="inputClasses"
           class="w-full block bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           @input="input($event)"
         />
@@ -36,6 +34,10 @@ export default {
       type: String,
       default: ''
     },
+    labelPosition: {
+      type: String,
+      default: 'left'
+    },
     value: {
       type: String,
       default: ''
@@ -48,6 +50,35 @@ export default {
   data: () => ({
     elementId: ''
   }),
+  computed: {
+    wrapperClasses() {
+      const map = {
+        top: '',
+        left: 'flex'
+      }
+
+      return map[this.labelPosition]
+    },
+    labelClasses() {
+      const map = {
+        top: 'w-full mb-2',
+        left: 'w-1/3 pr-4 mb-0 text-right'
+      }
+
+      return map[this.labelPosition]
+    },
+    inputWrapperClasses() {
+      const map = {
+        top: '',
+        left: 'w-2/3'
+      }
+
+      return map[this.labelPosition]
+    },
+    inputClasses() {
+      return ''
+    }
+  },
   mounted() {
     this.elementId = getId(this.label)
 
