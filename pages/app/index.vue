@@ -11,7 +11,7 @@
     <div class="grid grid-cols-4 gap-2">
       <div
         v-for="(envelope, envelopeIndex) in envelopes"
-        :id="`envelope-${envelope.label}`"
+        :id="`envelope${envelope.label}`"
         :key="envelope.label"
         :class="{
           'bg-gray-200': draggingTo === envelopeIndex,
@@ -55,7 +55,7 @@
 
       <router-link
         v-for="(category, categoryIndex) in categories"
-        :id="`category-${category.label}`"
+        :id="`category${category.label}`"
         :key="category.label"
         v-touch:touchhold="editCategory(categoryIndex)"
         :to="`/app/${categoryIndex}`"
@@ -179,7 +179,12 @@ import TButton from '~/components/TButton'
 
 export default {
   layout: 'app',
-  transition: 'slide-down',
+  transition: {
+    name: 'slide-down',
+    afterEnter() {
+      this.$tours.dashboard.start()
+    }
+  },
   components: {
     TIcon,
     TPopup,
@@ -190,15 +195,15 @@ export default {
   data: () => ({
     steps: [
       {
-        target: '#envelope-Needs',
+        target: '#envelopeNeeds',
         content: 'Tap and hold an envelope and drop onto another to move money'
       },
       {
-        target: '#category-Groceries',
+        target: '#categoryGroceries',
         content: 'Tap and hold to edit category'
       },
       {
-        target: '#category-Cofee',
+        target: '#categoryCoffee',
         content: 'Click category to add an expense'
       }
     ],
@@ -274,9 +279,6 @@ export default {
     isMovingEditorShown() {
       this.movingAmount = null
     }
-  },
-  mounted() {
-    this.$tours.dashboard.start()
   },
   methods: {
     addCategory() {
