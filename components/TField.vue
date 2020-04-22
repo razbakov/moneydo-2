@@ -1,8 +1,8 @@
 <template>
   <div :class="wrapperClasses" class="w-full justify-start items-top">
-    <div v-if="label" :class="labelClasses" class="text-gray-700 font-bold">
+    <div v-if="label" :class="labelClasses">
       <label :for="elementId">
-        {{ label }}
+        <div class="text-gray-700 font-bold">{{ label }}</div>
       </label>
     </div>
     <div :class="inputWrapperClasses">
@@ -18,6 +18,9 @@
           @input="input($event)"
         />
       </slot>
+      <div v-if="description" class="text-gray-500 text-sm mt-1">
+        {{ description }}
+      </div>
     </div>
   </div>
 </template>
@@ -34,12 +37,16 @@ export default {
       type: String,
       default: ''
     },
+    description: {
+      type: String,
+      default: ''
+    },
     labelPosition: {
       type: String,
       default: 'left'
     },
     value: {
-      type: String,
+      type: [String, Number],
       default: ''
     },
     autoFocus: {
@@ -62,7 +69,7 @@ export default {
     labelClasses() {
       const map = {
         top: 'w-full mb-2',
-        left: 'w-1/3 pr-4 mb-0 text-right'
+        left: 'w-1/3 pr-4 mb-0 text-right pt-2'
       }
 
       return map[this.labelPosition]

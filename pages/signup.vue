@@ -17,7 +17,7 @@
           </TButton>
         </div>
         <div class="divider">or</div>
-        <form @submit.prevent="submit" class="md:flex items-end">
+        <form class="md:flex items-end" @submit.prevent="submit">
           <TField
             v-model="email"
             type="email"

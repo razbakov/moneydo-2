@@ -1,6 +1,17 @@
 <template>
+  <a
+    v-if="href"
+    :href="href"
+    class="cursor-pointer"
+    target="_blank"
+    rel="noopener noreferrer"
+    :class="classes"
+    v-on="$listeners"
+  >
+    <slot />
+  </a>
   <router-link
-    v-if="to"
+    v-else-if="to"
     class="cursor-pointer"
     :class="classes"
     :to="to"
@@ -17,6 +28,10 @@
 export default {
   props: {
     to: {
+      type: String,
+      default: ''
+    },
+    href: {
       type: String,
       default: ''
     },
@@ -41,7 +56,8 @@ export default {
         secondary:
           'bg-transparent text-primary font-semibold py-2 px-4 border border-primary rounded no-underline hover:bg-primary hover:text-white hover:border-transparent',
         link: 'underline font-semibold py-2 px-4 hover:no-underline',
-        nav: 'block font-semibold py-2 px-4'
+        nav:
+          'w-full text-left border-b border-primary rounded block font-semibold py-2 px-4 hover:bg-primary'
       }
 
       let classes = map[this.type]
