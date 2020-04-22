@@ -65,13 +65,13 @@
           <div
             v-for="item in items"
             :key="item.id"
-            :class="{ 'border-green-500': item.selected }"
+            :class="{ 'border-green': item.selected }"
             class="p-4 mb-4 card-item border-2 border-white"
             @click="select(item)"
           >
             <div
               class="float-right border w-4 h-4 rounded-full border-gray-500"
-              :class="selected[item.id] ? 'bg-green-500 border-green-500' : ''"
+              :class="selected[item.id] ? 'bg-green border-green' : ''"
             ></div>
             <div class="font-bold">
               {{ item.name }}

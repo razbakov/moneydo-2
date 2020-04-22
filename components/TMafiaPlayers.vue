@@ -24,13 +24,13 @@
           :map="map"
         >
           <div
-            :class="item.selected ? 'border-green-500' : ''"
+            :class="item.selected ? 'border-green' : ''"
             class="p-4 mb-4 card-item border-2 border-white"
             @click="select(item)"
           >
             <div
               class="float-right border w-4 h-4 rounded-full border-gray-500"
-              :class="item.selected ? 'bg-green-500 border-green-500' : ''"
+              :class="item.selected ? 'bg-green border-green' : ''"
             ></div>
             <div v-if="item.nickname" class="font-bold text-xl mb-2">
               {{ item.nickname }}

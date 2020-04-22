@@ -24,7 +24,7 @@
         @dragleave="dragleave(envelopeIndex, $event)"
         @dragover.prevent
       >
-        <div class="text-lg font-bold font-mono text-green-500 leading-none">
+        <div class="text-lg font-bold font-mono text-green leading-none">
           {{ envelope.today }}€
         </div>
         <div class="text-xs text-gray-600">
@@ -38,7 +38,9 @@
         class="text-center text-primary rounded bg-white p-4 shadow my-2"
       >
         <img class="inline-block" src="/svg/piggy.svg" alt="Savings" />
-        <div class="text-3xl mt-2 leading-tight">You saved 17€</div>
+        <div class="text-3xl mt-2 leading-tight">
+          You saved <span class="font-mono">17€</span>
+        </div>
         <div>since your last visit 2 days ago</div>
         <TButton type="primary" class="mt-2" @click="showWinner = false"
           >Yeah!</TButton
