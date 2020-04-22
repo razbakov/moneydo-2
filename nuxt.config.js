@@ -66,6 +66,9 @@ export default {
     '@nuxtjs/sentry',
     'portal-vue/nuxt'
   ],
+  purgeCSS: {
+    enabled: false
+  },
   pwa: {
     meta: {
       name: app.name,
