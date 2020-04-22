@@ -10,7 +10,12 @@
         label="Budget Name"
         label-position="top"
       />
-      <TField v-model="total" label="Leftover" label-position="top" />
+      <TField
+        v-model="total"
+        label="Leftover"
+        type="tel"
+        label-position="top"
+      />
     </div>
     <div class="my-6">
       <details class="mx-2">
@@ -48,11 +53,15 @@
     <TField
       v-for="envelope in envelopes"
       :key="envelope.label"
-      v-model="envelope.today"
+      v-model="envelope.planned"
       :label="envelope.label"
+      type="tel"
       :description="envelope.description"
       class="mb-2 rounded border p-2"
     />
+    <TField label="Balance" class="mb-2">
+      <div class="font-mono p-2">{{ balance }}</div>
+    </TField>
     <div class="flex justify-end mt-6">
       <TButton type="primary">Save</TButton>
     </div>
@@ -76,28 +85,34 @@ export default {
       {
         label: 'Needs',
         description:
-          'Things you can’t live without, like food, toilet paper and shampoo.',
-        today: 50
+          'Things you can’t live without, like food, toilet paper and shampoo.'
       },
       {
         label: 'Wants',
         description:
-          'Purchases you enjoy but don’t need, like a takeout meal or pair of new shoes.',
-        today: 60
+          'Purchases you enjoy but don’t need, like a takeout meal or pair of new shoes.'
       },
       {
         label: 'Culture',
-        description: 'Things like movies, books, museum visits and education.',
-        today: 6
+        description: 'Things like movies, books, museum visits and education.'
       },
       {
         label: 'Extra',
         description:
-          "Expenses you aren't going to anticipate, like a doctor’s visit, car repair or unplanned presents.",
-        today: 9
+          "Expenses you aren't going to anticipate, like a doctor’s visit, car repair or unplanned presents."
       }
     ]
-  })
+  }),
+  computed: {
+    envelopesTotal() {
+      return this.envelopes
+        .map((e) => parseInt(e.planned || 0))
+        .reduce((previous, current) => previous + current)
+    },
+    balance() {
+      return parseInt(this.total || 0) - this.envelopesTotal
+    }
+  }
 }
 </script>
 
