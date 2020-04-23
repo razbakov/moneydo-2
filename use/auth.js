@@ -42,7 +42,7 @@ export default () => {
     setMarketing()
   }
 
-  const budgetId = computed(() => state.account.budgetId)
+  const budgetId = computed(() => state.account?.budgetId)
 
   if (!state.initialized) {
     firebase.auth().onAuthStateChanged(setUser)
