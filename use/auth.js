@@ -8,6 +8,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import clean from 'lodash-clean'
 import useRouter from '~/use/router'
+import useDoc from '~/use/doc'
 
 const state = Vue.observable({
   loading: true,
@@ -180,7 +181,9 @@ export default () => {
         .set(newAccount)
 
       await loadAccount()
-    } else if (!state.account.marketing) {
+    }
+
+    if (!state.account.marketing) {
       await firestore
         .collection('accounts')
         .doc(state.uid)
@@ -189,6 +192,29 @@ export default () => {
             ...state.marketing,
             existing: true
           }
+        })
+    }
+
+    if (!state.account.defaultCategories) {
+      const { create } = useDoc('categories')
+
+      await create({
+        label: 'Groceries',
+        envelope: 'Needs',
+        icon: 'fridge'
+      })
+
+      await create({
+        label: 'Shopping',
+        envelope: 'Wants',
+        icon: 'store'
+      })
+
+      await firestore
+        .collection('accounts')
+        .doc(state.uid)
+        .update({
+          defaultCategories: true
         })
     }
 

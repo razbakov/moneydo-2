@@ -5,7 +5,7 @@ import 'firebase/firestore'
 
 const state = Vue.observable({})
 
-export default (name, filter) => {
+export default (name, filter, onLoaded) => {
   let field = ''
   let value = ''
 
@@ -32,6 +32,10 @@ export default (name, filter) => {
     }
 
     filteredCollection.onSnapshot((snapshot) => {
+      if (onLoaded) {
+        onLoaded()
+      }
+
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'modified' || change.type === 'added') {
           Vue.set(state[hash], change.doc.id, change.doc.data())

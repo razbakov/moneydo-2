@@ -70,13 +70,13 @@
         </h4>
 
         <router-link
-          v-for="category in categories"
+          v-for="(category, categoryIndex) in categories"
           :key="category.label"
           v-touch:touchhold="editCategory(category.id)"
           :to="`/app/${category.id}`"
         >
           <div
-            :id="`category${category.label}`"
+            :id="`category${categoryIndex}`"
             class="bg-white cursor-pointer hover:bg-gray-200 rounded shadow mb-2 flex justify-between p-2"
           >
             <div class="flex">
@@ -262,11 +262,11 @@ export default {
         content: 'Drag and drop to move budget between envelopes'
       },
       {
-        target: '#categoryGroceries',
+        target: '#category0',
         content: 'Tap and hold to change name, icon, envelope or to delete'
       },
       {
-        target: '#categoryCoffee',
+        target: '#category0',
         content: 'Click to add an expense'
       }
     ],

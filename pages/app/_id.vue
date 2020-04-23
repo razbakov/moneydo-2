@@ -183,7 +183,7 @@ export default {
       }
 
       this.expenseChanges = {
-        amount: 0,
+        amount: '',
         description: '',
         date: new Date(),
         category: this.categoryId
