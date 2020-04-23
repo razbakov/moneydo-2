@@ -1,25 +1,29 @@
 <template>
-  <BudgetTour v-if="!budgetId" />
+  <TLoader v-if="loading" />
+  <BudgetTour v-else-if="!budgetId" />
   <BudgetView v-else :budget-id="budgetId" />
 </template>
 
 <script>
 import useAuth from '~/use/auth'
+import TLoader from '~/components/TLoader'
 import BudgetTour from '~/components/Budget/Tour'
 import BudgetView from '~/components/Budget/View'
 
 export default {
   components: {
     BudgetView,
-    BudgetTour
+    BudgetTour,
+    TLoader
   },
   layout: 'app',
   transition: 'slide-down',
   setup() {
-    const { budgetId } = useAuth()
+    const { loading, budgetId } = useAuth()
 
     return {
-      budgetId
+      budgetId,
+      loading
     }
   }
 }

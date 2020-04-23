@@ -28,17 +28,6 @@ export default () => {
   if (window) {
     isAdmin = !!window.localStorage.getItem('is_admin')
 
-    const storedUid = window.localStorage.getItem('uid')
-
-    if (storedUid) {
-      state.uid = storedUid
-    }
-
-    const storeAccount = window.localStorage.getItem('account')
-    if (storeAccount) {
-      state.account = JSON.parse(storeAccount)
-    }
-
     setMarketing()
   }
 
