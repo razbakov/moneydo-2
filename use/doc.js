@@ -9,7 +9,8 @@ export default (name) => {
   const firestore = firebase.firestore()
 
   const state = reactive({
-    loading: true,
+    loading: false,
+    saving: false,
     exists: false,
     doc: null,
     id: null,
@@ -18,7 +19,25 @@ export default (name) => {
 
   const collection = firestore.collection(name)
 
-  async function loadById(id) {
+  function sync(id) {
+    state.loading = true
+    collection.doc(id).onSnapshot((doc) => {
+      state.loading = false
+      state.exists = doc.exists
+
+      if (doc.exists) {
+        state.doc = doc.data()
+        state.id = doc.id
+      } else {
+        state.doc = null
+        state.id = null
+      }
+    })
+  }
+
+  async function load(id) {
+    state.loading = true
+
     const doc = await collection.doc(id).get()
     state.id = id
 
@@ -39,10 +58,10 @@ export default (name) => {
     return true
   }
 
-  async function load(slug) {
-    const filteredCollection = await collection.where('slug', '==', slug).get()
+  async function find(param, value) {
+    state.loading = true
 
-    state.slug = slug
+    const filteredCollection = await collection.where(param, '==', value).get()
 
     if (filteredCollection.docs.length === 0) {
       state.exists = false
@@ -63,16 +82,8 @@ export default (name) => {
     return true
   }
 
-  async function update(data) {
-    if (data.id) {
-      state.id = data.id
-      state.exists = true
-    }
-
-    if (!data.id) {
-      const result = await create(data)
-      return result
-    }
+  async function update(id, data) {
+    state.saving = true
 
     const changes = {
       updatedAt: +new Date(),
@@ -80,25 +91,36 @@ export default (name) => {
       ...data
     }
 
-    const result = await collection.doc(data.id).update(changes)
+    const result = await collection.doc(id).update(changes)
+
+    state.saving = false
+
     return result
   }
 
-  async function updateById(id, data) {
-    const result = await collection.doc(id).update(data)
-    return result
-  }
+  async function set(id, data) {
+    state.saving = true
 
-  async function setById(id, data) {
     const result = await collection.doc(id).set(data)
+
+    state.saving = false
+
     return result
   }
 
   async function remove(id) {
-    await collection.doc(id).delete()
+    state.saving = true
+
+    const result = await collection.doc(id).delete()
+
+    state.saving = false
+
+    return result
   }
 
   async function create(data) {
+    state.saving = true
+
     const doc = await collection.add({
       createdAt: +new Date(),
       updatedAt: +new Date(),
@@ -107,7 +129,8 @@ export default (name) => {
       ...data
     })
 
-    state.loading = false
+    state.id = doc.id
+    state.saving = false
 
     return doc
   }
@@ -119,12 +142,12 @@ export default (name) => {
   return {
     ...toRefs(state),
     create,
-    load,
+    find,
     update,
-    loadById,
+    load,
     remove,
-    updateById,
     isCreator,
-    setById
+    set,
+    sync
   }
 }

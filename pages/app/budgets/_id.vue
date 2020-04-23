@@ -1,5 +1,6 @@
 <template>
-  <div class="p-4 card">
+  <TLoader v-if="loading" />
+  <div v-else class="p-4 card">
     <portal to="title">
       <div class="text-lg">Edit Budget</div>
     </portal>
@@ -12,7 +13,7 @@
         placeholder="(e.g. April)"
       />
       <TField
-        v-model="total"
+        v-model="leftover"
         label="Leftover"
         type="tel"
         label-position="top"
@@ -77,25 +78,29 @@
       <div class="font-mono p-2">{{ balance }}</div>
     </TField>
     <div class="flex justify-end mt-6">
-      <TButton type="primary" to="/app/?budget=1">Save</TButton>
+      <TButton type="primary" @click="save">Save</TButton>
     </div>
   </div>
 </template>
 
 <script>
+import useAuth from '~/use/auth'
+import useDoc from '~/use/doc'
 import TField from '~/components/TField'
 import TButton from '~/components/TButton'
+import TLoader from '~/components/TLoader'
 
 export default {
   layout: 'app',
   transition: 'slide-down',
   components: {
     TField,
-    TButton
+    TButton,
+    TLoader
   },
   data: () => ({
     name: '',
-    total: '',
+    leftover: '',
     envelopes: [
       {
         label: 'Needs',
@@ -122,6 +127,20 @@ export default {
       }
     ]
   }),
+  setup() {
+    const { updateAccount } = useAuth()
+    const { update, create, load, id, doc, loading } = useDoc('budgets')
+
+    return {
+      updateAccount,
+      update,
+      create,
+      load,
+      id,
+      doc,
+      loading
+    }
+  },
   computed: {
     envelopesTotal() {
       return this.envelopes
@@ -129,7 +148,51 @@ export default {
         .reduce((previous, current) => previous + current)
     },
     balance() {
-      return parseInt(this.total || 0) - this.envelopesTotal
+      return parseInt(this.leftover || 0) - this.envelopesTotal
+    },
+    editing() {
+      return this.$route.params.id !== '-'
+    },
+    budgetId() {
+      if (!this.editing) {
+        return null
+      }
+
+      return this.$route.params.id
+    }
+  },
+  async mounted() {
+    if (!this.editing) {
+      return
+    }
+
+    await this.load(this.budgetId)
+
+    this.name = this.doc.name
+    this.leftover = this.doc.leftover
+    this.envelopes = this.doc.envelopes
+  },
+  methods: {
+    async save() {
+      const changes = {
+        name: this.name,
+        leftover: this.leftover,
+        envelopes: this.envelopes
+      }
+
+      if (!this.editing) {
+        await this.create(changes)
+
+        const accountChanges = {
+          budgetId: this.id
+        }
+
+        await this.updateAccount(accountChanges)
+      } else {
+        await this.update(this.budgetId, changes)
+      }
+
+      this.$router.push('/app/')
     }
   }
 }

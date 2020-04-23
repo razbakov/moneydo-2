@@ -41,7 +41,7 @@ export default {
     classes() {
       const map = {
         simple:
-          'w-full flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow',
+          'bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow',
         primary:
           'bg-primary no-underline text-white font-semibold py-2 px-4 rounded hover:text-white hover:bg-dark',
         base:

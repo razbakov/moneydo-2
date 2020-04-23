@@ -11,7 +11,10 @@
           <h2>Sign in with</h2>
         </div>
         <div class="text-center">
-          <TButton @click="signInWithGoogle">
+          <TButton
+            class="w-full flex items-center justify-center"
+            @click="signInWithGoogle"
+          >
             <TIcon name="google" />
             Google
           </TButton>

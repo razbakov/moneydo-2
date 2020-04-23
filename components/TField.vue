@@ -91,7 +91,9 @@ export default {
 
     if (this.autoFocus) {
       this.$nextTick(() => {
-        this.$refs.input.focus()
+        if (this.$refs.input) {
+          this.$refs.input.focus()
+        }
       })
     }
   },
