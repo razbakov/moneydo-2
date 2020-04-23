@@ -42,6 +42,8 @@ export default () => {
     setMarketing()
   }
 
+  const budgetId = computed(() => state.account.budgetId)
+
   if (!state.initialized) {
     firebase.auth().onAuthStateChanged(setUser)
 
@@ -400,6 +402,7 @@ export default () => {
     getAccount,
     can,
     signInAnonymously,
-    signInWithEmailLink
+    signInWithEmailLink,
+    budgetId
   }
 }

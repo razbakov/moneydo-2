@@ -6,9 +6,8 @@
       :callbacks="{ onFinish: markTutorial, onSkip: markTutorial }"
     ></v-tour>
 
-    <TLoader v-if="loading" />
-    <main v-else class="p-2 bg-light">
-      <portal to="title">
+    <main class="p-2 bg-light">
+      <portal v-if="doc" to="title">
         <transition appear name="slide-down">
           <div class="text-lg">{{ doc.name }}</div>
         </transition>
@@ -199,7 +198,6 @@ import TIcon from '~/components/TIcon'
 import TPopup from '~/components/TPopup'
 import TField from '~/components/TField'
 import TSelect from '~/components/TSelect'
-import TLoader from '~/components/TLoader'
 import TButton from '~/components/TButton'
 
 export default {
@@ -208,8 +206,7 @@ export default {
     TPopup,
     TField,
     TSelect,
-    TButton,
-    TLoader
+    TButton
   },
   props: {
     budgetId: {
@@ -285,7 +282,7 @@ export default {
   }),
   computed: {
     envelopes() {
-      return this.doc.envelopes
+      return this.doc?.envelopes
     }
   },
   watch: {
