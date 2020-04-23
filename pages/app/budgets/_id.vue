@@ -9,12 +9,14 @@
         auto-focus
         label="Budget Name"
         label-position="top"
+        placeholder="(e.g. April)"
       />
       <TField
         v-model="total"
         label="Leftover"
         type="tel"
         label-position="top"
+        placeholder="(€ after bills)"
       />
     </div>
     <div class="my-6">
@@ -37,7 +39,18 @@
         </div>
       </details>
       <details class="mt-2 mx-2">
-        <summary>Can I add more categories?</summary>
+        <summary>What is envelope for?</summary>
+        <div class="mt-2 bg-gray-200 rounded p-2 text-sm">
+          <p>
+            Envelope is like a real paper envelope where you put cash. You can
+            take money from one envelope for multiple expense categories. For
+            example take money from envelope Needs for Groceries, Medicine,
+            House.
+          </p>
+        </div>
+      </details>
+      <details class="mt-2 mx-2">
+        <summary>Can I add more envelopes?</summary>
         <div class="mt-2 bg-gray-200 rounded p-2 text-sm">
           <p>
             We encourage you to try 4 envelopes budgeting method, which is
@@ -55,6 +68,7 @@
       :key="envelope.label"
       v-model="envelope.planned"
       :label="envelope.label"
+      :placeholder="envelope.placeholder"
       type="tel"
       :description="envelope.description"
       class="mb-2 rounded border p-2"
@@ -63,7 +77,7 @@
       <div class="font-mono p-2">{{ balance }}</div>
     </TField>
     <div class="flex justify-end mt-6">
-      <TButton type="primary">Save</TButton>
+      <TButton type="primary" to="/app/?budget=1">Save</TButton>
     </div>
   </div>
 </template>
@@ -74,6 +88,7 @@ import TButton from '~/components/TButton'
 
 export default {
   layout: 'app',
+  transition: 'slide-down',
   components: {
     TField,
     TButton
@@ -84,20 +99,24 @@ export default {
     envelopes: [
       {
         label: 'Needs',
+        placeholder: '= 50% of income - bills',
         description:
           'Things you can’t live without, like food, toilet paper and shampoo.'
       },
       {
         label: 'Wants',
+        placeholder: '= 30% of income',
         description:
           'Purchases you enjoy but don’t need, like a takeout meal or pair of new shoes.'
       },
       {
         label: 'Culture',
+        placeholder: 'take part from Wants',
         description: 'Things like movies, books, museum visits and education.'
       },
       {
         label: 'Extra',
+        placeholder: 'take part from Wants',
         description:
           "Expenses you aren't going to anticipate, like a doctor’s visit, car repair or unplanned presents."
       }

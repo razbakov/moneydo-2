@@ -51,6 +51,7 @@
       >
         <div class="flex">
           <input
+            id="input"
             ref="input"
             v-model="expenses[activeExpense].amount"
             v-focus
@@ -58,6 +59,7 @@
             class="w-1/3 mr-2 bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           />
           <input
+            id="description"
             ref="description"
             v-model="expenses[activeExpense].description"
             type="text"
@@ -70,7 +72,7 @@
             class="flex items-center cursor-pointer"
             @click="selectDate = true"
           >
-            <TIcon class="p-2 w-10" name="calendar" />
+            <TIcon id="date" class="p-2 w-10" name="calendar" />
             {{ getDateTime(expenses[activeExpense].date) }}
           </div>
         </div>
@@ -79,6 +81,7 @@
         </div>
       </footer>
     </transition>
+    <v-tour name="expense" :steps="steps"></v-tour>
   </div>
 </template>
 
@@ -94,6 +97,25 @@ export default {
     VDatePicker
   },
   data: () => ({
+    steps: [
+      {
+        target: '#input',
+        content: 'Add new expense right away'
+      },
+      {
+        target: '#description',
+        content: 'Add some notes if you want'
+      },
+      {
+        target: '#date',
+        content: 'Change date of transaction if you forgot to do it right away'
+      },
+      {
+        target: '#expense0',
+        content:
+          'Click on any transaction to edit. Click again to close the editor.'
+      }
+    ],
     selectDate: false,
     isMenuOpen: false,
     activeExpense: 0,
@@ -258,6 +280,7 @@ export default {
   },
   mounted() {
     this.scrollToActive()
+    setTimeout(this.$tours.expense.start, 500)
   },
   methods: {
     getDateTime,

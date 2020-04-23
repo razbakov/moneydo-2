@@ -2,7 +2,6 @@
   <a
     v-if="href"
     :href="href"
-    class="cursor-pointer"
     target="_blank"
     rel="noopener noreferrer"
     :class="classes"
@@ -10,16 +9,10 @@
   >
     <slot />
   </a>
-  <router-link
-    v-else-if="to"
-    class="cursor-pointer"
-    :class="classes"
-    :to="to"
-    v-on="$listeners"
-  >
+  <router-link v-else-if="to" :class="classes" :to="to" v-on="$listeners">
     <slot />
   </router-link>
-  <button v-else class="cursor-pointer" :class="classes" v-on="$listeners">
+  <button v-else :class="classes" v-on="$listeners">
     <slot />
   </button>
 </template>
@@ -60,7 +53,8 @@ export default {
           'w-full text-left border-b border-primary rounded block font-semibold py-2 px-4 hover:bg-primary'
       }
 
-      let classes = map[this.type]
+      let classes =
+        map[this.type] + ' outline-none focus:outline-none cursor-pointer'
 
       if (this.color) {
         classes += ` text-${this.color} border-${this.color} hover:bg-${this.color} hover:text-white`

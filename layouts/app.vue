@@ -9,6 +9,7 @@
         <THamburger v-model="isMenuOpen" class="pt-1" />
       </portal-target>
       <portal-target name="title" class="w-full"></portal-target>
+      <portal-target name="actions"></portal-target>
     </header>
 
     <div
