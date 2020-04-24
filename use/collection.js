@@ -36,7 +36,7 @@ export default (name, filter) => {
         collection = collection.where(field, '==', value)
       }
 
-      collection.onSnapshot((snapshot) => {
+      collection.onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'modified' || change.type === 'added') {
             Vue.set(state[hash], change.doc.id, change.doc.data())
