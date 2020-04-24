@@ -51,9 +51,10 @@
       </div>
     </main>
     <transition appear name="slide-up">
-      <footer
+      <form
         v-if="activeExpense"
         class="fixed bottom-0 w-full md:max-w-md bg-white rounded-t shadow-top p-2"
+        @submit="updateExpense"
       >
         <div class="flex">
           <input
@@ -71,20 +72,28 @@
             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           />
         </div>
-        <div class="flex justify-between items-center text-gray-800">
+        <div class="flex justify-end items-center text-gray-800 mt-2">
           <div
-            class="flex items-center cursor-pointer"
-            @click="selectDate = true"
+            class="flex items-center flex-grow cursor-pointer"
+            @click="selectDate = !selectDate"
           >
             <TIcon id="date" class="p-2 w-10" name="calendar" />
             {{ getDateTime(expenseChanges.date) }}
           </div>
-          <TButton class="mt-2" @click="updateExpense">Save</TButton>
+          <TButton
+            v-if="activeExpense != '-'"
+            type="link"
+            color="red-500"
+            @click="removeExpense"
+          >
+            <TIcon name="delete" />
+          </TButton>
+          <TButton @click="updateExpense">Save</TButton>
         </div>
         <div v-if="selectDate" class="flex justify-center">
           <VDatePicker v-model="expenseChanges.date" is-inline />
         </div>
-      </footer>
+      </form>
     </transition>
     <v-tour
       name="expense"
@@ -145,7 +154,7 @@ export default {
     const { params } = useRouter()
     const categoryId = params.id
 
-    const { create, update } = useDoc('expenses')
+    const { create, update, remove } = useDoc('expenses')
 
     const { getById: load } = useCollection('categories')
     const category = computed(() => load(categoryId))
@@ -163,7 +172,8 @@ export default {
       update,
       getById,
       account,
-      updateAccount
+      updateAccount,
+      remove
     }
   },
   mounted() {
@@ -180,6 +190,10 @@ export default {
       })
     },
     getDateTime,
+    async removeExpense() {
+      await this.remove(this.activeExpense)
+      this.activeExpense = false
+    },
     addExpense() {
       if (this.activeExpense === '-') {
         this.activeExpense = false
@@ -195,7 +209,9 @@ export default {
 
       this.activeExpense = '-'
     },
-    async updateExpense() {
+    async updateExpense(e) {
+      e.preventDefault()
+
       if (this.activeExpense === '-') {
         await this.create(this.expenseChanges)
       } else {

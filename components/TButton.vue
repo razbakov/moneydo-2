@@ -12,7 +12,7 @@
   <router-link v-else-if="to" :class="classes" :to="to" v-on="$listeners">
     <slot />
   </router-link>
-  <button v-else :class="classes" v-on="$listeners">
+  <button v-else type="button" :class="classes" v-on="$listeners">
     <slot />
   </button>
 </template>

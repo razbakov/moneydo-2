@@ -169,14 +169,17 @@
           ]"
           class="mb-6"
         />
-        <div class="flex justify-between">
+        <div class="flex justify-start">
           <TButton
-            type="secondary"
+            v-if="editingCategory != '-'"
+            type="link"
             color="red-500"
-            @click="editingCategory = -1"
-            >Delete</TButton
+            class="flex-grow"
+            @click="removeCategory"
           >
-          <div class="flex justify-end">
+            <TIcon name="delete" />
+          </TButton>
+          <div class="flex w-full justify-end">
             <TButton type="link" @click="editingCategory = false"
               >Cancel</TButton
             >
@@ -217,7 +220,7 @@ export default {
   setup(params) {
     const { account, updateAccount } = useAuth()
     const { load, doc, loading } = useDoc('budgets')
-    const { create, update } = useDoc('categories')
+    const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
 
     load(params.budgetId)
@@ -226,12 +229,12 @@ export default {
       doc,
       loading,
       categories,
-      categoriesRefs: {},
       create,
       getById,
       update,
       account,
-      updateAccount
+      updateAccount,
+      remove
     }
   },
   data: () => ({
@@ -294,6 +297,11 @@ export default {
     this.startTutorial()
   },
   methods: {
+    async removeCategory() {
+      await this.remove(this.editingCategory)
+      this.categoryChanges = {}
+      this.editingCategory = false
+    },
     startTutorial() {
       if (!this.account.tutorialDashboard) {
         setTimeout(this.$tours.dashboard.start, 500)
