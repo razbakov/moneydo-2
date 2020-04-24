@@ -65,6 +65,7 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/sentry',
     '@nuxtjs/robots',
+    '@nuxtjs/sitemap',
     'portal-vue/nuxt'
   ],
   purgeCSS: {
@@ -153,5 +154,9 @@ export default {
       UserAgent: '*',
       Disallow: '/app'
     }
-  ]
+  ],
+  sitemap: {
+    hostname: app.url,
+    routes: ['/']
+  }
 }
