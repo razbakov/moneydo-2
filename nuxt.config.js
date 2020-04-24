@@ -75,7 +75,6 @@ export default {
     workbox: {
       offline: true,
       dev: false,
-      offlineStrategy: 'CacheFirst',
       pagesURLPattern: '/.*'
     },
     meta: {
