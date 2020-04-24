@@ -74,10 +74,7 @@ export default {
       offline: true,
       dev: false,
       offlineStrategy: 'CacheFirst',
-      pagesURLPattern: '/.*',
-      config: {
-        debug: true
-      }
+      pagesURLPattern: '/.*'
     },
     meta: {
       name: app.name,
