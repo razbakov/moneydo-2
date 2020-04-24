@@ -3,13 +3,23 @@
     class="container mx-auto md:max-w-md md:shadow-lg md:my-4 md:border border-primary md:rounded"
   >
     <header
-      class="sticky overflow-hidden top-0 bg-dark text-white font-bold h-16 flex items-center shadow z-10 w-full"
+      class="sticky overflow-hidden top-0 bg-dark text-white font-bold h-16 shadow z-10 w-full flex items-center"
     >
       <portal-target name="nav">
         <THamburger v-model="isMenuOpen" class="pt-1" />
       </portal-target>
       <portal-target name="title" class="w-full"></portal-target>
       <portal-target name="actions" class="flex"></portal-target>
+      <transition appear name="slide-up">
+        <div
+          v-if="$nuxt.isOnline"
+          class="absolute right-0 top-0 bg-green rounded-full h-2 w-2 mr-2 mt-2"
+        />
+        <div
+          v-else
+          class="absolute right-0 top-0 bg-red-700 rounded-full h-2 w-2 mr-2 mt-2"
+        />
+      </transition>
     </header>
 
     <div

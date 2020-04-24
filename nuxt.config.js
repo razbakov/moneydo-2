@@ -70,6 +70,15 @@ export default {
     enabled: false
   },
   pwa: {
+    workbox: {
+      offline: true,
+      dev: false,
+      offlineStrategy: 'CacheFirst',
+      pagesURLPattern: '/.*',
+      config: {
+        debug: true
+      }
+    },
     meta: {
       name: app.name,
       description: app.description,
