@@ -299,7 +299,8 @@ export default {
       },
       {
         target: '#envelopes',
-        content: 'Here are your envelopes with money that you can spend',
+        content:
+          'Here are your envelopes with money that you can spend today. Every day it adds your daily limit. Daily limit = total planned / total days.',
         params: {
           highlight: true
         }
