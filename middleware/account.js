@@ -1,3 +1,4 @@
+import ls from 'local-storage'
 import useAuth from '~/use/auth'
 
 export default async ({ route, redirect }) => {
@@ -6,7 +7,7 @@ export default async ({ route, redirect }) => {
   await getAccount()
 
   if (!confirmedAccount.value) {
-    window.localStorage.setItem('target', route.fullPath)
+    ls('target', route.fullPath)
     redirect('/app/account')
   }
 }

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import ls from 'local-storage'
 import useAuth from '~/use/auth'
 import TForm from '~/components/TForm'
 import TLoader from '~/components/TLoader'
@@ -73,8 +74,8 @@ export default {
 
       await this.updateAccount(changes)
 
-      let target = window.localStorage.getItem('target')
-      window.localStorage.removeItem('target')
+      let target = ls('target')
+      ls.remove('target')
 
       if (!target) {
         target = '/app'

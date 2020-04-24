@@ -26,7 +26,7 @@ export default () => {
   let isAdmin = false
 
   if (window) {
-    isAdmin = !!window.localStorage.getItem('is_admin')
+    isAdmin = false
 
     setMarketing()
   }
@@ -146,12 +146,8 @@ export default () => {
     if (!state.uid) {
       state.account = null
       state.profile = null
-      window.localStorage.removeItem('uid')
-      window.localStorage.removeItem('account')
       return
     }
-
-    window.localStorage.setItem('uid', state.uid)
 
     const account = await loadAccount()
 
@@ -233,7 +229,6 @@ export default () => {
     }
 
     state.account = doc.data()
-    window.localStorage.setItem('account', JSON.stringify(state.account))
     state.loading = false
 
     return true
@@ -334,7 +329,7 @@ export default () => {
     // the sign-in operation.
     // Get the email if available. This should be available if the user completes
     // the flow on the same device where they started it.
-    let email = window.localStorage.getItem('emailForSignIn')
+    let email = ls('emailForSignIn')
     if (!email) {
       // User opened the link on a different device. To prevent session fixation
       // attacks, ask the user to provide the associated email again. For example:
@@ -347,7 +342,7 @@ export default () => {
     state.signingIn = false
 
     // Clear email from storage.
-    window.localStorage.removeItem('emailForSignIn')
+    ls.remove('emailForSignIn')
 
     // You can access the new user via result.user
     // Additional user info profile not available via:
@@ -367,7 +362,7 @@ export default () => {
     // The link was successfully sent. Inform the user.
     // Save the email locally so you don't need to ask the user for it again
     // if they open the link on the same device.
-    window.localStorage.setItem('emailForSignIn', email)
+    ls('emailForSignIn', email)
   }
 
   function signInWithGoogle() {

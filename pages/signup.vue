@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import ls from 'local-storage'
 import TLoader from '~/components/TLoader'
 import useAuth from '~/use/auth'
 import TButton from '~/components/TButton'
@@ -78,8 +79,8 @@ export default {
     uid: {
       handler(val) {
         if (val) {
-          let target = window.localStorage.getItem('target')
-          window.localStorage.removeItem('target')
+          let target = ls('target')
+          ls.remove('target')
 
           if (!target) {
             target = '/app'
