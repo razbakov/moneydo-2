@@ -113,9 +113,6 @@ export default {
       })
     }
   },
-  generate: {
-    routes: ['/', '/signup/']
-  },
   env: {
     app,
     firebase: {
