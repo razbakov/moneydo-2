@@ -16,6 +16,16 @@
   animation: slide-down 0.2s;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @keyframes zoom {
   0% {
     transform: scale3d(0.3, 0.3, 0.3);

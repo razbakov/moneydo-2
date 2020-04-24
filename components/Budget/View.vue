@@ -20,8 +20,26 @@
           <TIcon name="edit" />
         </TButton>
       </portal>
-      <h4 class="mb-1 font-bold text-xs text-gray-600">
-        Budget
+
+      <div class="flex my-2 justify-center">
+        <div
+          v-for="mode in modes"
+          :key="mode.name"
+          class="py-1 px-4 text-dark rounded cursor-pointer"
+          :class="{ 'bg-white shadow': mode.name === activeMode }"
+          @click="activeMode = mode.name"
+        >
+          {{ mode.label }}
+        </div>
+      </div>
+
+      <h4 class="mb-1 font-bold text-xs text-gray-600 flex justify-between">
+        <span>Budget</span>
+        <span class="font-normal"
+          >{{ leftover }}€ left for
+          <span v-if="!daysLeft">today</span>
+          <span v-else>{{ daysLeft }} days</span>
+        </span>
       </h4>
       <div id="envelopes" class="grid grid-cols-4 gap-2">
         <div
@@ -40,8 +58,29 @@
           @dragleave="dragleave(envelopeIndex, $event)"
           @dragover.prevent
         >
-          <div class="text-lg font-bold font-mono text-green leading-none">
-            {{ get('today', envelope.planned) }}€
+          <div
+            v-if="activeMode === 'today' && available(envelope) >= 0"
+            class="text-lg font-bold font-mono text-green leading-none"
+          >
+            {{ available(envelope) }}€
+          </div>
+          <div
+            v-if="activeMode === 'today' && available(envelope) < 0"
+            class="text-lg font-bold font-mono text-orange-500 leading-none"
+          >
+            {{ projection(envelope) }}€
+          </div>
+          <div
+            v-if="activeMode === 'left'"
+            class="text-lg font-bold font-mono text-green leading-none"
+          >
+            {{ left(envelope) }}€
+          </div>
+          <div
+            v-if="activeMode === 'planned'"
+            class="text-lg font-bold font-mono text-green leading-none"
+          >
+            {{ envelope.planned }}€
           </div>
           <div class="text-xs text-gray-600">
             {{ envelope.label }}
@@ -94,7 +133,7 @@
               </div>
             </div>
             <div class="font-mono text-black text-lg items-center flex">
-              {{ category.total || 0 }}€
+              {{ totalExpenses(category.id) }}€
             </div>
           </div>
         </router-link>
@@ -194,6 +233,7 @@
 </template>
 
 <script>
+import { differenceInDays } from 'date-fns'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
@@ -202,6 +242,7 @@ import TPopup from '~/components/TPopup'
 import TField from '~/components/TField'
 import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
+import { getDateObect } from '~/utils'
 
 export default {
   components: {
@@ -222,6 +263,18 @@ export default {
     const { load, doc, loading } = useDoc('budgets')
     const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
+    const { docs: expenses } = useCollection('expenses')
+
+    const totalExpenses = (category) => {
+      if (!expenses.value.length) {
+        return 0
+      }
+
+      return expenses.value
+        .filter((e) => e.category === category)
+        .map((e) => parseInt(e.amount || 0))
+        .reduce((previous, current) => previous + current, 0)
+    }
 
     load(params.budgetId)
 
@@ -234,7 +287,8 @@ export default {
       update,
       account,
       updateAccount,
-      remove
+      remove,
+      totalExpenses
     }
   },
   data: () => ({
@@ -270,6 +324,22 @@ export default {
         content: 'Click to add an expense'
       }
     ],
+    now: null,
+    activeMode: 'today',
+    modes: [
+      {
+        name: 'today',
+        label: 'Today'
+      },
+      {
+        name: 'left',
+        label: 'Left'
+      },
+      {
+        name: 'planned',
+        label: 'Planned'
+      }
+    ],
     showWinner: false,
     category: {},
     movingAmount: null,
@@ -285,7 +355,36 @@ export default {
   }),
   computed: {
     envelopes() {
-      return this.doc?.envelopes
+      return this.doc?.envelopes || []
+    },
+    leftover() {
+      if (!this.envelopes.length) {
+        return 0
+      }
+
+      return this.envelopes
+        .map((e) => this.left(e))
+        .reduce((previous, current) => previous + current, 0)
+    },
+    daysLeft() {
+      if (!this.now || !this.doc) {
+        return 0
+      }
+
+      return differenceInDays(getDateObect(this.doc.end), this.now)
+    },
+    totalDays() {
+      if (!this.doc) {
+        return 0
+      }
+
+      return differenceInDays(
+        getDateObect(this.doc.end),
+        getDateObect(this.doc.start)
+      )
+    },
+    daysSpent() {
+      return this.totalDays - this.daysLeft
     }
   },
   watch: {
@@ -295,8 +394,46 @@ export default {
   },
   mounted() {
     this.startTutorial()
+    this.now = new Date()
   },
   methods: {
+    left(envelope) {
+      return envelope.planned - this.spent(envelope)
+    },
+    spent(envelope) {
+      if (!this.categories.length) {
+        return 0
+      }
+
+      return this.categories
+        .filter((c) => c.envelope === envelope.label)
+        .map((c) => this.totalExpenses(c.id))
+        .reduce((previous, current) => previous + current, 0)
+    },
+    perDay(envelope) {
+      if (!this.totalDays) {
+        return parseInt(envelope.planned)
+      }
+
+      return Math.round((envelope.planned / this.totalDays) * 100) / 100
+    },
+    daysToAvoid(envelope) {
+      return Math.round((this.available(envelope) / this.perDay(envelope)) * -1)
+    },
+    projection(envelope) {
+      return Math.round((this.left(envelope) / this.daysLeft) * 100) / 100
+    },
+    available(envelope) {
+      if (!this.daysSpent) {
+        return this.perDay(envelope)
+      }
+
+      const result = Math.round(
+        this.perDay(envelope) * this.daysSpent - this.spent(envelope)
+      )
+
+      return result
+    },
     removeCategory() {
       this.remove(this.editingCategory)
       this.categoryChanges = {}
@@ -311,9 +448,6 @@ export default {
       this.updateAccount({
         tutorialDashboard: true
       })
-    },
-    get(filter, total) {
-      return total
     },
     updateCategory() {
       if (this.editingCategory === '-') {

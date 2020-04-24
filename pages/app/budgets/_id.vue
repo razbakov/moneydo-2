@@ -20,6 +20,16 @@
         placeholder="(€ after bills)"
       />
     </div>
+    <div class="mt-2 grid grid-cols-2 gap-2">
+      <TField
+        v-model="start"
+        auto-focus
+        label="Start Date"
+        type="date"
+        label-position="top"
+      />
+      <TField v-model="end" label="End Date" type="date" label-position="top" />
+    </div>
     <div class="my-6">
       <details class="mx-2">
         <summary>How to calculate leftover?</summary>
@@ -101,6 +111,8 @@ export default {
   data: () => ({
     name: '',
     leftover: '',
+    start: '',
+    end: '',
     envelopes: [
       {
         label: 'Needs',
@@ -171,13 +183,17 @@ export default {
     this.name = this.doc.name
     this.leftover = this.doc.leftover
     this.envelopes = this.doc.envelopes
+    this.start = this.doc.start
+    this.end = this.doc.end
   },
   methods: {
     async save() {
       const changes = {
         name: this.name,
         leftover: this.leftover,
-        envelopes: this.envelopes
+        envelopes: this.envelopes,
+        start: this.start,
+        end: this.end
       }
 
       if (!this.editing) {
