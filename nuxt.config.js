@@ -64,6 +64,7 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/sentry',
+    '@nuxtjs/robots',
     'portal-vue/nuxt'
   ],
   purgeCSS: {
@@ -142,5 +143,15 @@ export default {
   sentry: {
     dsn:
       'https://3f700818152d4dc1b6e915dbac40cb36@o340470.ingest.sentry.io/1878655'
-  }
+  },
+  robots: [
+    {
+      UserAgent: '*',
+      Allow: '/'
+    },
+    {
+      UserAgent: '*',
+      Disallow: '/app'
+    }
+  ]
 }

@@ -19,7 +19,7 @@
       </div>
     </main>
     <div class="flex justify-center my-16">
-      <img src="/screens/app.png" class="h-screen" />
+      <img src="/screens/app.png" alt="App Screenshot" class="h-screen" />
     </div>
   </div>
 </template>
