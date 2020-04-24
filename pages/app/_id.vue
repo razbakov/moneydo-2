@@ -1,5 +1,6 @@
 <template>
-  <main>
+  <TLoader v-if="loading" />
+  <main v-else>
     <portal to="nav">
       <router-link to="/app/" class="outline-none hover:opacity-75">
         <TIcon class="ml-2 w-10 p-2 text-white" name="close" />
@@ -103,13 +104,15 @@ import useRouter from '~/use/router'
 import { getDateTime } from '~/utils'
 import TIcon from '~/components/TIcon'
 import TButton from '~/components/TButton'
+import TLoader from '~/components/TLoader'
 
 export default {
   layout: 'app',
   components: {
     TIcon,
     VDatePicker,
-    TButton
+    TButton,
+    TLoader
   },
   data: () => ({
     steps: [
@@ -137,10 +140,12 @@ export default {
     expenseChanges: null
   }),
   setup() {
-    const { account, updateAccount } = useAuth()
+    const { account, updateAccount, loading } = useAuth()
 
     const { params } = useRouter()
     const categoryId = params.id
+
+    const { create, update } = useDoc('expenses')
 
     const { getById: load } = useCollection('categories')
     const category = computed(() => load(categoryId))
@@ -149,9 +154,8 @@ export default {
       category: categoryId
     })
 
-    const { create, update } = useDoc('expenses')
-
     return {
+      loading,
       categoryId,
       expenses,
       category,
@@ -165,7 +169,7 @@ export default {
   mounted() {
     this.addExpense()
 
-    if (!this.account.tutorialExpense) {
+    if (this.account && !this.account.tutorialExpense) {
       setTimeout(this.$tours.expense.start, 1000)
     }
   },

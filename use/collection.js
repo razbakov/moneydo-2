@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import { computed, toRefs } from '@vue/composition-api'
+import { computed, toRefs, watch } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import useAuth from '~/use/auth'
 
 const state = Vue.observable({})
 
-export default (name, filter, onLoaded) => {
+export default (name, filter) => {
   let field = ''
   let value = ''
 
@@ -16,33 +17,34 @@ export default (name, filter, onLoaded) => {
 
   const hash = `${name}-${field}-${value}`
 
+  const { uid } = useAuth()
+
   if (!state[hash]) {
     const firestore = firebase.firestore()
-    const collection = firestore.collection(name)
-
-    let filteredCollection = collection
+    let collection = firestore.collection(name)
 
     Vue.set(state, hash, {})
 
-    if (filter) {
-      const field = Object.keys(filter)[0]
-      const value = filter[field]
-
-      filteredCollection = collection.where(field, '==', value)
-    }
-
-    filteredCollection.onSnapshot((snapshot) => {
-      if (onLoaded) {
-        onLoaded()
+    watch(() => {
+      if (!uid.value) {
+        return
       }
 
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === 'modified' || change.type === 'added') {
-          Vue.set(state[hash], change.doc.id, change.doc.data())
-        }
-        if (change.type === 'removed') {
-          Vue.delete(state[hash], change.doc.id)
-        }
+      collection = collection.where('createdBy', '==', uid.value)
+
+      if (field) {
+        collection = collection.where(field, '==', value)
+      }
+
+      collection.onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'modified' || change.type === 'added') {
+            Vue.set(state[hash], change.doc.id, change.doc.data())
+          }
+          if (change.type === 'removed') {
+            Vue.delete(state[hash], change.doc.id)
+          }
+        })
       })
     })
   }
