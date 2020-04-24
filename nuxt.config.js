@@ -8,7 +8,7 @@ const app = {
     slack: ''
   },
   nav: [],
-  url: process.env.BASE_URL,
+  url: 'https://moneydo.netlify.app/',
   cover: '/cover/wide.png'
 }
 
