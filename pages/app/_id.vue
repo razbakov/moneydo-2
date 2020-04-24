@@ -192,8 +192,8 @@ export default {
       })
     },
     getDateTime,
-    async removeExpense() {
-      await this.remove(this.activeExpense)
+    removeExpense() {
+      this.remove(this.activeExpense)
       this.activeExpense = false
     },
     addExpense() {
@@ -211,13 +211,13 @@ export default {
 
       this.activeExpense = '-'
     },
-    async updateExpense(e) {
+    updateExpense(e) {
       e.preventDefault()
 
       if (this.activeExpense === '-') {
-        await this.create(this.expenseChanges)
+        this.create(this.expenseChanges)
       } else {
-        await this.update(this.activeExpense, this.expenseChanges)
+        this.update(this.activeExpense, this.expenseChanges)
       }
 
       this.activeExpense = false

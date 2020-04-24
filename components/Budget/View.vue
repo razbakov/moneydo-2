@@ -297,8 +297,8 @@ export default {
     this.startTutorial()
   },
   methods: {
-    async removeCategory() {
-      await this.remove(this.editingCategory)
+    removeCategory() {
+      this.remove(this.editingCategory)
       this.categoryChanges = {}
       this.editingCategory = false
     },
@@ -315,11 +315,11 @@ export default {
     get(filter, total) {
       return total
     },
-    async updateCategory() {
+    updateCategory() {
       if (this.editingCategory === '-') {
-        await this.create(this.categoryChanges)
+        this.create(this.categoryChanges)
       } else {
-        await this.update(this.editingCategory, this.categoryChanges)
+        this.update(this.editingCategory, this.categoryChanges)
       }
 
       this.categoryChanges = {}
