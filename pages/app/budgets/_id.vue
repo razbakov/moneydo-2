@@ -63,7 +63,7 @@
       disabled
       type="tel"
       class="mb-2 rounded border p-2"
-      description="That's what left for you to spend"
+      description="That's what left for you to spend."
     />
 
     <h4 class="my-4 font-bold text-brand-black">
@@ -220,7 +220,7 @@ export default {
         return 20
       },
       set(val) {
-        this.savings = (val / 100) * this.income
+        this.savings = Math.round((val / 100) * this.income)
       }
     },
     envelopesTotal() {
@@ -274,8 +274,12 @@ export default {
   methods: {
     calculate() {
       this.leftover = this.income - this.expenses - this.savings
+      let needs = Math.round(this.income * 0.5) - this.expenses
 
-      const needs = Math.round(this.income * 0.5) - this.expenses
+      if (needs <= 0) {
+        needs = this.leftover
+      }
+
       const wants = this.leftover - needs
 
       this.getEnvelope('Needs').planned = needs
