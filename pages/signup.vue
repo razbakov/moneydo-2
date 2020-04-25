@@ -20,7 +20,7 @@
           </TButton>
         </div>
         <div class="divider">or</div>
-        <form class="md:flex items-end" @submit.prevent="submit">
+        <form class="md:flex items-end" @submit="submit">
           <TField
             v-model="email"
             type="email"
@@ -28,7 +28,11 @@
             label="Email"
             label-position="top"
           />
-          <TButton type="primary" class="mt-2 w-full md:mt-0 md:w-24 md:ml-4">
+          <TButton
+            @click="submit"
+            type="primary"
+            class="mt-2 w-full md:mt-0 md:w-24 md:ml-4"
+          >
             Sign In
           </TButton>
         </form>
@@ -92,7 +96,9 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit(e) {
+      e.preventDefault()
+
       this.sendSignInLinkToEmail(this.email)
       this.emailSent = true
     }
