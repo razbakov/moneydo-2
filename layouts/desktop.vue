@@ -34,6 +34,9 @@
       </div>
       <nuxt />
     </div>
+    <div class="bg-brand-black lg:flex-grow">
+      <br />
+    </div>
   </div>
 </template>
 
