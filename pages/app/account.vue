@@ -22,7 +22,7 @@ import TLoader from '~/components/TLoader'
 
 export default {
   middleware: ['auth'],
-  layout: 'app',
+  layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
   components: {
     TForm,
     TLoader

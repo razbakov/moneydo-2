@@ -28,6 +28,21 @@ module.exports = {
       secondary: '#f6ad55',
       'secondary-light': '#feebc8',
 
+      brand: {
+        white: '#ECE3F7',
+        black: '#2A1B3C',
+        light: '#BEB6C9',
+        dark: '#524562',
+        success: '#23CE6B',
+        fail: '#D65964',
+        disable: '#8B7F99',
+        primary: '#8D68D9',
+        'primary+1': '#A684E2',
+        'primary+2': '#C0A0EA',
+        'primary-1': '#7351C8',
+        'primary-2': '#5C41B1'
+      },
+
       gray: {
         100: '#f7fafc',
         200: '#edf2f7',

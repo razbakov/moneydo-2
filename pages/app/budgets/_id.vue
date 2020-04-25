@@ -101,7 +101,7 @@ import TButton from '~/components/TButton'
 import TLoader from '~/components/TLoader'
 
 export default {
-  layout: 'app',
+  layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
   transition: 'slide-down',
   components: {
     TField,

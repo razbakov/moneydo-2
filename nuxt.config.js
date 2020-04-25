@@ -68,7 +68,8 @@ export default {
     '@nuxtjs/sentry',
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
-    'portal-vue/nuxt'
+    'portal-vue/nuxt',
+    '@nuxtjs/device'
   ],
   purgeCSS: {
     enabled: false

@@ -30,12 +30,20 @@
     <transition name="slide">
       <nav
         v-if="isMenuOpen"
-        class="text-lg absolute left-0 w-3/4 md:w-1/4 bottom-0 top-0 bg-dark text-white z-30 shadow-lg p-4"
+        class="text-lg absolute left-0 w-56 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
       >
-        <TButton type="nav" to="/app/">Dasboard</TButton>
-        <TButton type="nav" to="/app/budgets/-">+ Create Budget</TButton>
-        <TButton type="nav" to="/app/account">Account</TButton>
-        <TButton type="nav" @click="signOut">Logout</TButton>
+        <div class="p-4 flex items-center justify-left leading-none text-lg">
+          <img class="h-8" src="/logo.svg" :alt="app.name" />
+          <span class="ml-2 font-bold text-2xl">
+            {{ app.name }}
+          </span>
+        </div>
+        <div class="mt-8">
+          <TButton type="nav" to="/app/">Dashboard</TButton>
+          <TButton type="nav" to="/app/budgets/-">+ Create Budget</TButton>
+          <TButton type="nav" to="/app/account">Account</TButton>
+          <TButton type="nav" to="/app/signout">Logout</TButton>
+        </div>
       </nav>
     </transition>
     <div class="overflow-hidden">
@@ -45,26 +53,22 @@
 </template>
 
 <script>
-import useAuth from '~/use/auth'
 import THamburger from '~/components/THamburger'
 import TButton from '~/components/TButton'
 
 export default {
-  layout: 'app',
   components: {
     THamburger,
     TButton
   },
+  setup() {
+    const app = process.env.app
+
+    return { app }
+  },
   data: () => ({
     isMenuOpen: false
   }),
-  setup() {
-    const { signOut } = useAuth()
-
-    return {
-      signOut
-    }
-  },
   watch: {
     $route() {
       this.isMenuOpen = false

@@ -29,9 +29,9 @@
             label-position="top"
           />
           <TButton
-            @click="submit"
             type="primary"
             class="mt-2 w-full md:mt-0 md:w-24 md:ml-4"
+            @click="submit"
           >
             Sign In
           </TButton>

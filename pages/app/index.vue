@@ -16,7 +16,7 @@ export default {
     BudgetTour,
     TLoader
   },
-  layout: 'app',
+  layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
   transition: 'slide-down',
   setup() {
     const { loading, budgetId } = useAuth()
