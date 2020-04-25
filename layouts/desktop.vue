@@ -2,7 +2,7 @@
   <div class="flex min-h-screen h-full">
     <div class="w-56 bg-brand-black text-white text-sm">
       <div class="p-4 flex items-center justify-left leading-none text-lg">
-        <img class="h-8" src="/logo.svg" :alt="app.name" />
+        <TIcon class="h-8 w-8" name="logo" />
         <span class="ml-2 font-bold text-2xl">
           {{ app.name }}
         </span>
@@ -41,10 +41,12 @@
 </template>
 
 <script>
+import TIcon from '~/components/TIcon'
 import TButton from '~/components/TButton'
 
 export default {
   components: {
+    TIcon,
     TButton
   },
   setup() {

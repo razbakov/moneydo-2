@@ -4,76 +4,72 @@
     <portal to="title">
       <div class="text-lg">Edit Budget</div>
     </portal>
-    <div class="grid grid-cols-2 gap-2">
-      <TField
-        v-model="name"
-        auto-focus
-        label="Budget Name"
-        label-position="top"
-        placeholder="(e.g. April)"
-      />
-      <TField
-        v-model="leftover"
-        label="Leftover"
-        type="tel"
-        label-position="top"
-        placeholder="(€ after bills)"
-      />
-    </div>
-    <div class="mt-2 grid grid-cols-2 gap-2">
+
+    <TSelect v-model="month" label="Month" :options="months" />
+
+    <div v-if="month === 'custom'" class="mt-2 rounded border p-4">
+      <TField v-model="name" label="Name" label-position="top" />
       <TField
         v-model="start"
-        auto-focus
         label="Start Date"
         type="date"
         label-position="top"
       />
       <TField v-model="end" label="End Date" type="date" label-position="top" />
     </div>
-    <div class="my-6">
-      <details class="mx-2">
-        <summary>How to calculate leftover?</summary>
-        <div class="mt-2 bg-gray-200 rounded p-2 text-sm">
-          <p>You can calculate it yourself using this formula:</p>
-          <p class="my-2 font-mono text-xs p-2 bg-dark rounded text-white">
-            Leftover = Income - Fixed Expenses - Savings
-          </p>
-          <p>Or use an interactive step by step guide:</p>
-          <div class="flex justify-end mt-2">
-            <TButton
-              type="secondary"
-              href="https://moneydo-budget-planner.netlify.app/?utm_medium=moneydo"
-              target="_blank"
-              >Open Budget Planner</TButton
-            >
-          </div>
-        </div>
-      </details>
-      <details class="mt-2 mx-2">
-        <summary>What is envelope for?</summary>
-        <div class="mt-2 bg-gray-200 rounded p-2 text-sm">
-          <p>
-            Envelope is like a real paper envelope where you put cash. You can
-            take money from one envelope for multiple expense categories. For
-            example take money from envelope Needs for Groceries, Medicine,
-            House.
-          </p>
-        </div>
-      </details>
-      <details class="mt-2 mx-2">
-        <summary>Can I add more envelopes?</summary>
-        <div class="mt-2 bg-gray-200 rounded p-2 text-sm">
-          <p>
-            We encourage you to try 4 envelopes budgeting method, which is
-            easier and more flexible than any other. This method is based on
-            Kakeibo method, which is well covered in internet.
-          </p>
-        </div>
-      </details>
-    </div>
-    <h4 class="mb-1 font-bold text-xs text-gray-600">
+
+    <TField
+      v-model="income"
+      label="Income (after tax)"
+      type="tel"
+      class="mt-2 mb-2 rounded border p-2"
+      description="If your income is not consistent each month, make an educated guess."
+    />
+
+    <TField
+      v-model="savings"
+      label="Savings"
+      type="tel"
+      class="mb-2 rounded border p-2"
+      description="Decide what you want to save. We recommend to save 20% of income."
+    >
+      <div slot="top" class="pt-10">
+        <vue-slider
+          v-model="savingsPercent"
+          tooltip="always"
+          :min="0"
+          :max="100"
+        >
+          <template v-slot:tooltip="{ value }">
+            <div class="p-1 rounded text-sm text-white bg-primary">
+              {{ value }}%
+            </div>
+          </template>
+        </vue-slider>
+      </div>
+    </TField>
+
+    <TField
+      v-model="expenses"
+      label="Fixed Expenses"
+      type="tel"
+      class="mb-2 rounded border p-2"
+      description="Total of your regular expenses: that's anything that recurs each month, such as rent, mortgage, utility bills, season tickets, credit card payments, phone, parking permit, gym membership, home, car, health, insurance, loans, etc."
+    />
+
+    <TField
+      v-model="leftover"
+      label="Leftover"
+      disabled
+      type="tel"
+      class="mb-2 rounded border p-2"
+      description="That's what left for you to spend"
+    />
+
+    <h4 class="my-4 font-bold text-brand-black">
       Envelopes
     </h4>
+
     <TField
       v-for="envelope in envelopes"
       :key="envelope.label"
@@ -84,9 +80,11 @@
       :description="envelope.description"
       class="mb-2 rounded border p-2"
     />
+
     <TField label="Balance" class="mb-2">
       <div class="font-mono p-2">{{ balance }}</div>
     </TField>
+
     <div class="flex justify-end mt-6">
       <TButton type="primary" @click="save">Save</TButton>
     </div>
@@ -94,9 +92,11 @@
 </template>
 
 <script>
+import VueSlider from 'vue-slider-component'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import TField from '~/components/TField'
+import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
 import TLoader from '~/components/TLoader'
 
@@ -105,37 +105,94 @@ export default {
   transition: 'slide-down',
   components: {
     TField,
+    TSelect,
     TButton,
-    TLoader
+    TLoader,
+    VueSlider
   },
   data: () => ({
     name: '',
+    month: '1',
     leftover: '',
     start: '',
     end: '',
+    income: '',
+    expenses: '',
+    savings: '',
+    months: [
+      {
+        value: '1',
+        label: 'January'
+      },
+      {
+        value: '2',
+        label: 'February'
+      },
+      {
+        value: '3',
+        label: 'March'
+      },
+      {
+        value: '4',
+        label: 'April'
+      },
+      {
+        value: '5',
+        label: 'May'
+      },
+      {
+        value: '6',
+        label: 'June'
+      },
+      {
+        value: '7',
+        label: 'July'
+      },
+      {
+        value: '8',
+        label: 'August'
+      },
+      {
+        value: '9',
+        label: 'September'
+      },
+      {
+        value: '10',
+        label: 'October'
+      },
+      {
+        value: '11',
+        label: 'November'
+      },
+      {
+        value: '12',
+        label: 'December'
+      },
+      {
+        value: 'custom',
+        label: 'Custom'
+      }
+    ],
     envelopes: [
       {
         label: 'Needs',
-        placeholder: '= 50% of income - bills',
         description:
           'Things you can’t live without, like food, toilet paper and shampoo.'
       },
       {
         label: 'Wants',
-        placeholder: '= 30% of income',
         description:
           'Purchases you enjoy but don’t need, like a takeout meal or pair of new shoes.'
       },
       {
         label: 'Culture',
-        placeholder: 'take part from Wants',
-        description: 'Things like movies, books, museum visits and education.'
+        description:
+          'Things that enrich your life, like museums, books and education.'
       },
       {
         label: 'Extra',
-        placeholder: 'take part from Wants',
         description:
-          "Expenses you aren't going to anticipate, like a doctor’s visit, car repair or unplanned presents."
+          'Unexpected costs that we all need to pay for, like a doctor’s visit, car repair or unplanned presents.'
       }
     ]
   }),
@@ -154,6 +211,18 @@ export default {
     }
   },
   computed: {
+    savingsPercent: {
+      get() {
+        if (this.income > 0) {
+          return Math.round((this.savings / this.income) * 100)
+        }
+
+        return 20
+      },
+      set(val) {
+        this.savings = (val / 100) * this.income
+      }
+    },
     envelopesTotal() {
       return this.envelopes
         .map((e) => parseInt(e.planned || 0))
@@ -173,6 +242,22 @@ export default {
       return this.$route.params.id
     }
   },
+  watch: {
+    savings() {
+      this.calculate()
+    },
+    income() {
+      this.savings = Math.round(this.income * 0.2)
+
+      this.calculate()
+    },
+    expenses() {
+      this.calculate()
+    },
+    leftover() {
+      this.calculate()
+    }
+  },
   async mounted() {
     if (!this.editing) {
       return
@@ -187,6 +272,20 @@ export default {
     this.end = this.doc.end
   },
   methods: {
+    calculate() {
+      this.leftover = this.income - this.expenses - this.savings
+
+      const needs = Math.round(this.income * 0.5) - this.expenses
+      const wants = this.leftover - needs
+
+      this.getEnvelope('Needs').planned = needs
+      this.getEnvelope('Wants').planned = Math.round(wants * 0.8)
+      this.getEnvelope('Culture').planned = Math.round(wants * 0.1)
+      this.getEnvelope('Extra').planned = Math.round(wants * 0.1)
+    },
+    getEnvelope(name) {
+      return this.envelopes.find((e) => e.label === name)
+    },
     async save() {
       const changes = {
         name: this.name,

@@ -6,6 +6,7 @@
       </label>
     </div>
     <div :class="inputWrapperClasses">
+      <slot name="top" />
       <slot>
         <input
           :id="elementId"
@@ -21,6 +22,7 @@
       <div v-if="description" class="text-gray-500 text-sm mt-1">
         {{ description }}
       </div>
+      <slot name="bottom" />
     </div>
   </div>
 </template>

@@ -33,7 +33,7 @@
         class="text-lg absolute left-0 w-56 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
       >
         <div class="p-4 flex items-center justify-left leading-none text-lg">
-          <img class="h-8" src="/logo.svg" :alt="app.name" />
+          <TIcon class="h-8 w-8" name="logo" />
           <span class="ml-2 font-bold text-2xl">
             {{ app.name }}
           </span>
@@ -55,11 +55,13 @@
 <script>
 import THamburger from '~/components/THamburger'
 import TButton from '~/components/TButton'
+import TIcon from '~/components/TIcon'
 
 export default {
   components: {
     THamburger,
-    TButton
+    TButton,
+    TIcon
   },
   setup() {
     const app = process.env.app
