@@ -1,3 +1,5 @@
+const isProd = process.env.NODE_ENV === 'production'
+
 const app = {
   name: 'MoneyDo',
   description: 'Budget Planner and Expense Tracker',
@@ -141,6 +143,7 @@ export default {
     }
   },
   sentry: {
+    disabled: !isProd,
     dsn:
       'https://3f700818152d4dc1b6e915dbac40cb36@o340470.ingest.sentry.io/1878655'
   },
