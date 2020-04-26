@@ -12,10 +12,6 @@ body {
 
 @tailwind components;
 
-.nuxt-link-exact-active {
-  @apply font-bold;
-}
-
 .hero {
   @apply p-2 text-center;
 }

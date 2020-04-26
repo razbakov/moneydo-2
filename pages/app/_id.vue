@@ -3,24 +3,28 @@
   <main v-else>
     <portal to="nav">
       <router-link to="/app/" class="outline-none hover:opacity-75">
-        <TIcon class="ml-2 w-10 p-2 text-white" name="close" />
+        <TIcon class="ml-2 w-10 p-2" name="close" />
       </router-link>
     </portal>
     <portal to="title">
       <transition appear name="slide-up">
         <div
           v-if="category"
-          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2 pl-1"
+          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2 pl-1 md:bg-white"
         >
           <div>
-            <div class="text-lg text-white font-bold leading-tight">
+            <div
+              class="text-lg text-white md:text-brand-black font-bold leading-tight"
+            >
               {{ category.label }}
             </div>
-            <div class="text-xs text-gray-400 leading-none">
+            <div class="text-xs text-gray-400 md:text-brand-dark leading-none">
               {{ category.envelope }}
             </div>
           </div>
-          <div class="font-mono text-white text-lg items-center flex mr-2">
+          <div
+            class="font-mono text-white md:text-brand-black text-lg items-center flex mr-2"
+          >
             {{ category.total }}
           </div>
         </div>

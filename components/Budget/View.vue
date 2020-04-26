@@ -9,15 +9,17 @@
     <main class="p-2 bg-light">
       <portal v-if="doc" to="title">
         <transition appear name="slide-down">
-          <div class="text-lg">{{ doc.name }}</div>
+          <div class="text-lg flex">
+            {{ doc.name }}
+          </div>
         </transition>
       </portal>
       <portal to="actions">
         <TButton id="help" type="link" @click="$tours.dashboard.start()">
           <TIcon name="help" />
         </TButton>
-        <TButton type="link" :to="`/app/budgets/${budgetId}`">
-          <TIcon name="edit" />
+        <TButton type="link" to="/app/budgets">
+          <TIcon name="down" />
         </TButton>
       </portal>
 
@@ -43,44 +45,44 @@
       </h4>
       <div id="envelopes" class="grid grid-cols-4 gap-2">
         <div
-          v-for="(envelope, envelopeIndex) in envelopes"
-          :id="`envelope${envelope.label}`"
-          :key="envelope.label"
+          v-for="envelope in envelopes"
+          :id="`envelope-${envelope.name}`"
+          :key="envelope.name"
           :class="{
-            'bg-gray-200': draggingTo === envelopeIndex,
-            'opacity-50': draggingItem === envelopeIndex
+            'bg-gray-200': draggingTo === envelope.name,
+            'opacity-50': draggingItem === envelope.name
           }"
           class="p-2 bg-white rounded text-gray-600 shadow-top text-center"
           draggable="true"
-          @dragstart="dragstart(envelopeIndex, $event)"
+          @dragstart="dragstart(envelope.name, $event)"
           @dragend="dragend($event)"
-          @dragenter="dragenter(envelopeIndex, $event)"
-          @dragleave="dragleave(envelopeIndex, $event)"
+          @dragenter="dragenter(envelope.name, $event)"
+          @dragleave="dragleave(envelope.name, $event)"
           @dragover.prevent
         >
           <div
-            v-if="activeMode === 'today' && available(envelope) >= 0"
+            v-if="activeMode === 'today' && available(envelope.name) >= 0"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ available(envelope) }}€
+            {{ available(envelope.name) }}€
           </div>
           <div
-            v-if="activeMode === 'today' && available(envelope) < 0"
+            v-if="activeMode === 'today' && available(envelope.name) < 0"
             class="text-lg font-bold font-mono text-orange-500 leading-none"
           >
-            {{ projection(envelope) }}€
+            {{ projection(envelope.name) }}€
           </div>
           <div
             v-if="activeMode === 'left'"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ left(envelope) }}€
+            {{ left(envelope.name) }}€
           </div>
           <div
             v-if="activeMode === 'planned'"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ envelope.planned }}€
+            {{ planned(envelope.name) }}€
           </div>
           <div class="text-xs text-gray-600">
             {{ envelope.label }}
@@ -128,7 +130,7 @@
                   {{ category.label }}
                 </div>
                 <div class="text-xs text-gray-600 leading-none">
-                  {{ category.envelope }}
+                  {{ getEnvelope(category.envelope).label }}
                 </div>
               </div>
             </div>
@@ -151,7 +153,9 @@
       <TPopup
         v-if="isMovingEditorShown"
         :title="
-          `Moving from ${envelopes[draggingItem].label} to ${envelopes[draggingTo].label}`
+          `Moving from ${getEnvelope(draggingItem).label} to ${
+            getEnvelope(draggingTo).label
+          }`
         "
         @close="moveend()"
       >
@@ -162,14 +166,14 @@
           type="tel"
           class="mb-6"
         />
-        <TField :label="envelopes[draggingItem].label">
+        <TField :label="getEnvelope(draggingItem).label">
           <div class="font-mono">
-            {{ envelopes[draggingItem].today - parseInt(movingAmount || 0) }}
+            {{ left(draggingItem) - parseInt(movingAmount || 0) }}
           </div>
         </TField>
-        <TField :label="envelopes[draggingTo].label" class="mt-2">
+        <TField :label="getEnvelope(draggingTo).label" class="mt-2">
           <div class="font-mono">
-            {{ envelopes[draggingTo].today + parseInt(movingAmount || 0) }}
+            {{ left(draggingTo) + parseInt(movingAmount || 0) }}
           </div>
         </TField>
         <div class="flex justify-end mt-6">
@@ -190,7 +194,7 @@
         />
         <TSelect
           v-model="categoryChanges.envelope"
-          :options="envelopes.map((e) => e.label)"
+          :options="envelopes"
           label="Envelope"
           class="mb-6"
         />
@@ -237,6 +241,7 @@ import { differenceInDays } from 'date-fns'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
 import useCollection from '~/use/collection'
+import useEnvelopes from '~/use/envelopes'
 import TIcon from '~/components/TIcon'
 import TPopup from '~/components/TPopup'
 import TField from '~/components/TField'
@@ -264,6 +269,7 @@ export default {
     const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
     const { docs: expenses } = useCollection('expenses')
+    const { envelopes, getEnvelope } = useEnvelopes()
 
     const totalExpenses = (category) => {
       if (!expenses.value.length) {
@@ -288,7 +294,9 @@ export default {
       account,
       updateAccount,
       remove,
-      totalExpenses
+      totalExpenses,
+      envelopes,
+      getEnvelope
     }
   },
   data: () => ({
@@ -313,7 +321,7 @@ export default {
         }
       },
       {
-        target: '#envelopeNeeds',
+        target: '#envelope-needs',
         content: 'Drag and drop to move budget between envelopes'
       },
       {
@@ -355,16 +363,9 @@ export default {
     categoryChanges: {}
   }),
   computed: {
-    envelopes() {
-      return this.doc?.envelopes || []
-    },
     leftover() {
-      if (!this.envelopes.length) {
-        return 0
-      }
-
       return this.envelopes
-        .map((e) => this.left(e))
+        .map((e) => this.left(e.name))
         .reduce((previous, current) => previous + current, 0)
     },
     daysLeft() {
@@ -398,8 +399,11 @@ export default {
     this.now = new Date()
   },
   methods: {
+    planned(envelope) {
+      return this.doc?.planned[envelope] || 0
+    },
     left(envelope) {
-      return envelope.planned - this.spent(envelope)
+      return this.planned(envelope) - this.spent(envelope)
     },
     spent(envelope) {
       if (!this.categories.length) {
@@ -407,16 +411,16 @@ export default {
       }
 
       return this.categories
-        .filter((c) => c.envelope === envelope.label)
+        .filter((c) => c.envelope === envelope)
         .map((c) => this.totalExpenses(c.id))
         .reduce((previous, current) => previous + current, 0)
     },
     perDay(envelope) {
       if (!this.totalDays) {
-        return parseInt(envelope.planned)
+        return this.planned(envelope)
       }
 
-      return Math.round((envelope.planned / this.totalDays) * 100) / 100
+      return Math.round((this.planned(envelope) / this.totalDays) * 100) / 100
     },
     daysToAvoid(envelope) {
       return Math.round((this.available(envelope) / this.perDay(envelope)) * -1)

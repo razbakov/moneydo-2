@@ -8,7 +8,7 @@
           to="/"
           class="no-underline flex items-center justify-center leading-none hover:no-underline text-4xl"
         >
-          <img class="h-12" src="/icon.svg" :alt="app.name" />
+          <TIcon class="h-12 w-12" name="logo" />
           <span class="ml-2 font-bold text-2xl">
             {{ app.name }}
           </span>
@@ -67,10 +67,12 @@
 <script>
 import useAuth from '~/use/auth'
 import TButton from '~/components/TButton'
+import TIcon from '~/components/TIcon'
 
 export default {
   components: {
-    TButton
+    TButton,
+    TIcon
   },
   data: () => ({
     isMenuOpen: false

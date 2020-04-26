@@ -32,18 +32,7 @@
         v-if="isMenuOpen"
         class="text-lg absolute left-0 w-56 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
       >
-        <div class="p-4 flex items-center justify-left leading-none text-lg">
-          <TIcon class="h-8 w-8" name="logo" />
-          <span class="ml-2 font-bold text-2xl">
-            {{ app.name }}
-          </span>
-        </div>
-        <div class="mt-8">
-          <TButton type="nav" to="/app/">Dashboard</TButton>
-          <TButton type="nav" to="/app/budgets/-">+ Create Budget</TButton>
-          <TButton type="nav" to="/app/account">Account</TButton>
-          <TButton type="nav" to="/app/signout">Logout</TButton>
-        </div>
+        <LayoutNavigation />
       </nav>
     </transition>
     <div class="overflow-hidden">
@@ -54,19 +43,12 @@
 
 <script>
 import THamburger from '~/components/THamburger'
-import TButton from '~/components/TButton'
-import TIcon from '~/components/TIcon'
+import LayoutNavigation from '~/components/Layout/Navigation'
 
 export default {
   components: {
     THamburger,
-    TButton,
-    TIcon
-  },
-  setup() {
-    const app = process.env.app
-
-    return { app }
+    LayoutNavigation
   },
   data: () => ({
     isMenuOpen: false

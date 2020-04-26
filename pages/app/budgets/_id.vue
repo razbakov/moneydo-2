@@ -1,6 +1,11 @@
 <template>
   <TLoader v-if="loading" />
   <div v-else class="p-4 card">
+    <portal to="nav">
+      <router-link to="/app/budgets" class="outline-none hover:opacity-75">
+        <TIcon class="ml-2 w-10 p-2" name="back" />
+      </router-link>
+    </portal>
     <portal to="title">
       <div class="text-lg">Edit Budget</div>
     </portal>
@@ -73,7 +78,7 @@
     <TField
       v-for="envelope in envelopes"
       :key="envelope.label"
-      v-model="envelope.planned"
+      v-model="planned[envelope.name]"
       :label="envelope.label"
       :placeholder="envelope.placeholder"
       type="tel"
@@ -85,20 +90,33 @@
       <div class="font-mono p-2">{{ balance }}</div>
     </TField>
 
-    <div class="flex justify-end mt-6">
+    <div class="flex justify-between mt-6">
+      <div>
+        <TButton
+          v-if="editing"
+          type="secondary"
+          color="brand-fail"
+          @click="removeBudget"
+          >Delete</TButton
+        >
+      </div>
+
       <TButton type="primary" @click="save">Save</TButton>
     </div>
   </div>
 </template>
 
 <script>
+import { getDaysInMonth, getYear, getMonth, formatISO9075 } from 'date-fns'
 import VueSlider from 'vue-slider-component'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
+import useEnvelopes from '~/use/envelopes'
 import TField from '~/components/TField'
 import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
 import TLoader from '~/components/TLoader'
+import TIcon from '~/components/TIcon'
 
 export default {
   layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
@@ -108,6 +126,7 @@ export default {
     TSelect,
     TButton,
     TLoader,
+    TIcon,
     VueSlider
   },
   data: () => ({
@@ -119,53 +138,54 @@ export default {
     income: '',
     expenses: '',
     savings: '',
+    now: null,
     months: [
       {
-        value: '1',
+        value: 1,
         label: 'January'
       },
       {
-        value: '2',
+        value: 2,
         label: 'February'
       },
       {
-        value: '3',
+        value: 3,
         label: 'March'
       },
       {
-        value: '4',
+        value: 4,
         label: 'April'
       },
       {
-        value: '5',
+        value: 5,
         label: 'May'
       },
       {
-        value: '6',
+        value: 6,
         label: 'June'
       },
       {
-        value: '7',
+        value: 7,
         label: 'July'
       },
       {
-        value: '8',
+        value: 8,
         label: 'August'
       },
       {
-        value: '9',
+        value: 9,
         label: 'September'
       },
       {
-        value: '10',
+        value: 10,
         label: 'October'
       },
       {
-        value: '11',
+        value: 11,
         label: 'November'
       },
       {
-        value: '12',
+        value: 12,
         label: 'December'
       },
       {
@@ -173,32 +193,24 @@ export default {
         label: 'Custom'
       }
     ],
-    envelopes: [
-      {
-        label: 'Needs',
-        description:
-          'Things you can’t live without, like food, toilet paper and shampoo.'
-      },
-      {
-        label: 'Wants',
-        description:
-          'Purchases you enjoy but don’t need, like a takeout meal or pair of new shoes.'
-      },
-      {
-        label: 'Culture',
-        description:
-          'Things that enrich your life, like museums, books and education.'
-      },
-      {
-        label: 'Extra',
-        description:
-          'Unexpected costs that we all need to pay for, like a doctor’s visit, car repair or unplanned presents.'
-      }
-    ]
+    fields: [
+      'name',
+      'month',
+      'leftover',
+      'start',
+      'end',
+      'income',
+      'expenses',
+      'savings',
+      'planned'
+    ],
+    planned: {},
+    mounting: true
   }),
   setup() {
     const { updateAccount } = useAuth()
-    const { update, create, load, id, doc, loading } = useDoc('budgets')
+    const { update, remove, create, load, id, doc, loading } = useDoc('budgets')
+    const { envelopes } = useEnvelopes()
 
     return {
       updateAccount,
@@ -207,7 +219,9 @@ export default {
       load,
       id,
       doc,
-      loading
+      loading,
+      remove,
+      envelopes
     }
   },
   computed: {
@@ -224,9 +238,10 @@ export default {
       }
     },
     envelopesTotal() {
-      return this.envelopes
-        .map((e) => parseInt(e.planned || 0))
-        .reduce((previous, current) => previous + current)
+      return Object.values(this.planned).reduce(
+        (previous, current) => previous + current,
+        0
+      )
     },
     balance() {
       return parseInt(this.leftover || 0) - this.envelopesTotal
@@ -243,6 +258,27 @@ export default {
     }
   },
   watch: {
+    month() {
+      if (this.month === 'custom' || !this.month) {
+        return
+      }
+
+      this.name = this.months.find((m) => +m.value === +this.month).label
+      const month = this.month - 1
+      const year = getYear(this.now)
+
+      const startDate = new Date(year, month, 1)
+      const endDay = getDaysInMonth(startDate)
+      const endDate = new Date(year, month, endDay)
+
+      this.start = formatISO9075(startDate, {
+        representation: 'date'
+      })
+
+      this.end = formatISO9075(endDate, {
+        representation: 'date'
+      })
+    },
     savings() {
       this.calculate()
     },
@@ -259,20 +295,30 @@ export default {
     }
   },
   async mounted() {
+    this.now = new Date()
+    this.month = getMonth(this.now) + 1
+
     if (!this.editing) {
+      this.mounting = false
       return
     }
 
     await this.load(this.budgetId)
 
-    this.name = this.doc.name
-    this.leftover = this.doc.leftover
-    this.envelopes = this.doc.envelopes
-    this.start = this.doc.start
-    this.end = this.doc.end
+    this.fields.forEach((field) => {
+      if (this.doc[field]) {
+        this[field] = this.doc[field]
+      }
+    })
+
+    this.mounting = false
   },
   methods: {
     calculate() {
+      if (this.mounting) {
+        return
+      }
+
       this.leftover = this.income - this.expenses - this.savings
       let needs = Math.round(this.income * 0.5) - this.expenses
 
@@ -282,39 +328,39 @@ export default {
 
       const wants = this.leftover - needs
 
-      this.getEnvelope('Needs').planned = needs
-      this.getEnvelope('Wants').planned = Math.round(wants * 0.8)
-      this.getEnvelope('Culture').planned = Math.round(wants * 0.1)
-      this.getEnvelope('Extra').planned = Math.round(wants * 0.1)
-    },
-    getEnvelope(name) {
-      return this.envelopes.find((e) => e.label === name)
-    },
-    async save() {
-      const changes = {
-        name: this.name,
-        leftover: this.leftover,
-        envelopes: this.envelopes,
-        start: this.start,
-        end: this.end
+      this.planned = {
+        needs,
+        wants: Math.round(wants * 0.8),
+        culture: Math.round(wants * 0.1),
+        extra: Math.round(wants * 0.1)
       }
+    },
+
+    removeBudget() {
+      this.remove(this.budgetId)
+
+      this.$router.push('/app/budgets')
+    },
+
+    save() {
+      const changes = {}
+
+      this.fields.forEach((field) => {
+        changes[field] = this[field]
+      })
 
       if (!this.editing) {
-        await this.create(changes)
+        this.create(changes)
 
-        const accountChanges = {
+        this.updateAccount({
           budgetId: this.id
-        }
-
-        await this.updateAccount(accountChanges)
+        })
       } else {
-        await this.update(this.budgetId, changes)
+        this.update(this.budgetId, changes)
       }
 
-      this.$router.push('/app/')
+      this.$router.push('/app/budgets')
     }
   }
 }
 </script>
-
-<style></style>

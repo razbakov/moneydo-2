@@ -1,23 +1,11 @@
 <template>
   <div class="flex min-h-screen h-full">
     <div class="w-56 bg-brand-black text-white text-sm">
-      <div class="p-4 flex items-center justify-left leading-none text-lg">
-        <TIcon class="h-8 w-8" name="logo" />
-        <span class="ml-2 font-bold text-2xl">
-          {{ app.name }}
-        </span>
-      </div>
-
-      <div class="mt-8">
-        <TButton type="nav" to="/app/">Dashboard</TButton>
-        <TButton type="nav" to="/app/budgets/-">+ Create Budget</TButton>
-        <TButton type="nav" to="/app/account">Account</TButton>
-        <TButton type="nav" to="/app/signout">Logout</TButton>
-      </div>
+      <LayoutNavigation />
     </div>
     <div class="overflow-hidden flex-grow max-w-screen-md p-4">
-      <div class="flex mb-4 px-1">
-        <portal-target name="nav"></portal-target>
+      <div class="flex mb-4 px-1 items-center">
+        <portal-target name="nav" class="text-brand-black"></portal-target>
         <portal-target name="title" class="w-full"></portal-target>
         <portal-target name="actions" class="flex"></portal-target>
 
@@ -41,18 +29,11 @@
 </template>
 
 <script>
-import TIcon from '~/components/TIcon'
-import TButton from '~/components/TButton'
+import LayoutNavigation from '~/components/Layout/Navigation'
 
 export default {
   components: {
-    TIcon,
-    TButton
-  },
-  setup() {
-    const app = process.env.app
-
-    return { app }
+    LayoutNavigation
   }
 }
 </script>
