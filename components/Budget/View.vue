@@ -38,9 +38,9 @@
       <h4 class="mb-1 font-bold text-xs text-gray-600 flex justify-between">
         <span>Budget</span>
         <span class="font-normal"
-          >{{ leftover }}€ left for
+          >{{ leftover }} left for
           <span v-if="!daysLeft">today</span>
-          <span v-else>{{ daysLeft }} days</span>
+          <span v-else>{{ daysLeft }} days.</span>
         </span>
       </h4>
       <div id="envelopes" class="grid grid-cols-4 gap-2">
@@ -64,25 +64,28 @@
             v-if="activeMode === 'today' && available(envelope.name) >= 0"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ available(envelope.name) }}€
+            {{ available(envelope.name) }}
           </div>
           <div
             v-if="activeMode === 'today' && available(envelope.name) < 0"
-            class="text-lg font-bold font-mono text-orange-500 leading-none"
+            class="text-lg font-bold font-mono text-brand-fail leading-none"
           >
-            {{ projection(envelope.name) }}€
+            {{ projection(envelope.name) }}
           </div>
           <div
             v-if="activeMode === 'left'"
-            class="text-lg font-bold font-mono text-green leading-none"
+            class="text-lg font-bold font-mono leading-none"
+            :class="
+              left(envelope.name) < 0 ? 'text-brand-fail' : 'text-brand-success'
+            "
           >
-            {{ left(envelope.name) }}€
+            {{ left(envelope.name) }}
           </div>
           <div
             v-if="activeMode === 'planned'"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ planned(envelope.name) }}€
+            {{ planned(envelope.name) }}
           </div>
           <div class="text-xs text-gray-600">
             {{ envelope.label }}
@@ -96,7 +99,7 @@
         >
           <TIcon class="inline-block" name="piggy" />
           <div class="text-3xl mt-2 leading-tight">
-            You saved <span class="font-mono">17€</span>
+            You saved <span class="font-mono">17</span>
           </div>
           <div>since your last visit 2 days ago</div>
           <TButton type="primary" class="mt-2" @click="showWinner = false"
@@ -135,7 +138,7 @@
               </div>
             </div>
             <div class="font-mono text-black text-lg items-center flex">
-              {{ totalExpenses(category.id) }}€
+              {{ totalExpenses(category.id) }}
             </div>
           </div>
         </router-link>
@@ -157,7 +160,7 @@
             getEnvelope(draggingTo).label
           }`
         "
-        @close="moveend()"
+        @close="isMovingEditorShown = false"
       >
         <TField
           v-model="movingAmount"
@@ -167,18 +170,20 @@
           class="mb-6"
         />
         <TField :label="getEnvelope(draggingItem).label">
-          <div class="font-mono">
+          <div class="font-mono pt-2">
             {{ left(draggingItem) - parseInt(movingAmount || 0) }}
           </div>
         </TField>
         <TField :label="getEnvelope(draggingTo).label" class="mt-2">
-          <div class="font-mono">
+          <div class="font-mono pt-2">
             {{ left(draggingTo) + parseInt(movingAmount || 0) }}
           </div>
         </TField>
         <div class="flex justify-end mt-6">
-          <TButton type="link" @click="moveend()">Cancel</TButton>
-          <TButton type="primary" @click="moveend()">Move</TButton>
+          <TButton type="link" @click="isMovingEditorShown = false"
+            >Cancel</TButton
+          >
+          <TButton type="primary" @click="moveBudget()">Move</TButton>
         </div>
       </TPopup>
       <TPopup
@@ -265,7 +270,7 @@ export default {
   },
   setup(params) {
     const { account, updateAccount } = useAuth()
-    const { load, doc, loading } = useDoc('budgets')
+    const { load, doc, loading, update: updateBudget } = useDoc('budgets')
     const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
     const { docs: expenses } = useCollection('expenses')
@@ -296,7 +301,8 @@ export default {
       remove,
       totalExpenses,
       envelopes,
-      getEnvelope
+      getEnvelope,
+      updateBudget
     }
   },
   data: () => ({
@@ -390,8 +396,11 @@ export default {
     }
   },
   watch: {
-    isMovingEditorShown() {
-      this.movingAmount = null
+    isMovingEditorShown(val) {
+      if (!val) {
+        this.draggingTo = null
+        this.draggingItem = null
+      }
     }
   },
   mounted() {
@@ -426,18 +435,27 @@ export default {
       return Math.round((this.available(envelope) / this.perDay(envelope)) * -1)
     },
     projection(envelope) {
-      return Math.round((this.left(envelope) / this.daysLeft) * 100) / 100
+      if (!this.daysLeft) {
+        return this.left(envelope)
+      }
+
+      const result = this.left(envelope) / this.daysLeft
+
+      if (result < 0) {
+        return '-'
+      }
+
+      return Math.round(result)
     },
     available(envelope) {
       if (!this.daysSpent) {
         return this.perDay(envelope)
       }
 
-      const result = Math.round(
+      const result =
         this.perDay(envelope) * this.daysSpent - this.spent(envelope)
-      )
 
-      return result
+      return Math.round(result)
     },
     removeCategory() {
       this.remove(this.editingCategory)
@@ -473,8 +491,20 @@ export default {
         this.editingCategory = id
       }
     },
-    moveend() {
+    moveBudget() {
       this.isMovingEditorShown = false
+
+      const planned = this.doc?.planned
+
+      planned[this.draggingItem] =
+        +planned[this.draggingItem] - this.movingAmount
+
+      planned[this.draggingTo] = +planned[this.draggingTo] + this.movingAmount
+
+      this.updateBudget(this.budgetId, {
+        planned
+      })
+
       this.draggingItem = null
       this.draggingTo = null
     },
@@ -484,8 +514,14 @@ export default {
     },
     dragend(e) {
       if (this.draggingItem === this.draggingTo) {
-        this.moveend()
+        this.isMovingEditorShown = false
         return
+      }
+
+      this.movingAmount = ''
+
+      if (this.left(this.draggingTo) < 0) {
+        this.movingAmount = this.left(this.draggingTo) * -1
       }
 
       this.isMovingEditorShown = true

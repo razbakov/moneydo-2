@@ -8,7 +8,8 @@
     <div :class="inputWrapperClasses">
       <slot name="top" />
       <slot>
-        <input
+        <component
+          :is="getComponent()"
           :id="elementId"
           ref="input"
           v-bind="$attrs"
@@ -50,6 +51,10 @@ export default {
     value: {
       type: [String, Number],
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'text'
     },
     autoFocus: {
       type: Boolean,
@@ -102,6 +107,13 @@ export default {
   methods: {
     input(event) {
       this.$emit('input', event.target.value)
+    },
+    getComponent() {
+      if (this.type === 'textarea') {
+        return 'textarea'
+      }
+
+      return 'input'
     }
   }
 }
