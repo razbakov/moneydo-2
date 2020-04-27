@@ -21,10 +21,20 @@
         class="flex items-center mb-2"
       >
         <div
-          class="bg-white cursor-pointer hover:bg-gray-200 rounded shadow flex-grow px-4 py-2 text-lg text-black font-bold leading-tight"
+          class="bg-white flex items-center cursor-pointer hover:bg-gray-200 rounded shadow flex-grow px-4 py-2 text-lg text-black font-bold leading-tight"
           @click="selectBudget(budget.id)"
         >
-          {{ budget.name }}
+          <div class="flex-grow">
+            <div>
+              {{ budget.name }}
+            </div>
+            <div class="text-gray-700 text-sm font-normal">
+              from {{ getDate(budget.start) }} to {{ getDate(budget.end) }}
+            </div>
+          </div>
+          <div>
+            {{ getTotal(budget.planned) }}
+          </div>
         </div>
         <TButton type="link" :to="`/app/budgets/${budget.id}`">
           <TIcon name="edit" />
@@ -42,6 +52,7 @@ import useAuth from '~/use/auth'
 import useCollection from '~/use/collection'
 import TButton from '~/components/TButton'
 import TIcon from '~/components/TIcon'
+import { getDate } from '~/utils'
 
 export default {
   layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
@@ -53,9 +64,15 @@ export default {
     const { docs: budgets } = useCollection('budgets')
     const { updateAccount } = useAuth()
 
-    return { budgets, updateAccount }
+    return { budgets, updateAccount, getDate }
   },
   methods: {
+    getTotal(planned) {
+      return Object.values(planned).reduce(
+        (previous, current) => previous + current,
+        0
+      )
+    },
     selectBudget(budgetId) {
       this.updateAccount({
         budgetId
