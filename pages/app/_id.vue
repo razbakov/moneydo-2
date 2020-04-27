@@ -155,7 +155,7 @@ export default {
     expenseChanges: null
   }),
   setup() {
-    const { account, updateAccount, loading } = useAuth()
+    const { account, updateAccount, loading, budgetId } = useAuth()
 
     const { params } = useRouter()
     const categoryId = params.id
@@ -165,11 +165,16 @@ export default {
     const { getById: load } = useCollection('categories')
     const category = computed(() => load(categoryId))
 
-    const { docs: expenses, getById } = useCollection('expenses', {
-      category: categoryId
-    })
+    const { docs, getById } = useCollection('expenses')
+
+    const expenses = computed(() =>
+      docs.value
+        .filter((e) => e.category === categoryId)
+        .filter((e) => e.budget === budgetId.value)
+    )
 
     return {
+      budgetId,
       loading,
       categoryId,
       expenses,
@@ -210,7 +215,8 @@ export default {
         amount: '',
         description: '',
         date: new Date(),
-        category: this.categoryId
+        category: this.categoryId,
+        budget: this.budgetId
       }
 
       this.activeExpense = '-'

@@ -37,10 +37,13 @@
 
       <h4 class="mb-1 font-bold text-xs text-gray-600 flex justify-between">
         <span>Budget</span>
-        <span class="font-normal"
+        <span v-if="active" class="font-normal"
           >{{ leftover }} left for
           <span v-if="!daysLeft">today</span>
-          <span v-else>{{ daysLeft }} days.</span>
+          <span v-else>{{ daysLeft }} days</span>
+        </span>
+        <span v-else-if="doc" class="font-normal">
+          from {{ getDate(doc.start) }} to {{ getDate(doc.end) }}
         </span>
       </h4>
       <div id="envelopes" class="grid grid-cols-4 gap-2">
@@ -94,6 +97,23 @@
       </div>
       <transition appear name="zoom-in-out">
         <div
+          v-if="doc && leftover < 0"
+          class="text-center text-brand-fail rounded bg-white p-4 shadow my-2"
+        >
+          <div class="text-3xl mt-2 leading-tight">
+            Negative Balance
+          </div>
+          <div>Reduce your savings or borrow some money</div>
+          <TButton
+            type="primary"
+            class="inline-block mt-4"
+            :to="`/app/budgets/${budgetId}`"
+            >Edit Budget</TButton
+          >
+        </div>
+      </transition>
+      <transition appear name="zoom-in-out">
+        <div
           v-if="showWinner"
           class="text-center text-primary rounded bg-white p-4 shadow my-2"
         >
@@ -137,7 +157,7 @@
                 </div>
               </div>
             </div>
-            <div class="font-mono text-black text-lg items-center flex">
+            <div class="font-mono text-black text-lg items-center flex pr-2">
               {{ totalExpenses(category.id) }}
             </div>
           </div>
@@ -252,7 +272,7 @@ import TPopup from '~/components/TPopup'
 import TField from '~/components/TField'
 import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
-import { getDateObect } from '~/utils'
+import { getDate, getDateObect } from '~/utils'
 
 export default {
   components: {
@@ -273,7 +293,10 @@ export default {
     const { load, doc, loading, update: updateBudget } = useDoc('budgets')
     const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
-    const { docs: expenses } = useCollection('expenses')
+    const { docs: expenses } = useCollection('expenses', {
+      budget: params.budgetId
+    })
+
     const { envelopes, getEnvelope } = useEnvelopes()
 
     const totalExpenses = (category) => {
@@ -302,7 +325,8 @@ export default {
       totalExpenses,
       envelopes,
       getEnvelope,
-      updateBudget
+      updateBudget,
+      getDate
     }
   },
   data: () => ({
@@ -340,21 +364,8 @@ export default {
       }
     ],
     now: null,
-    activeMode: 'today',
-    modes: [
-      {
-        name: 'today',
-        label: 'Today'
-      },
-      {
-        name: 'left',
-        label: 'Left'
-      },
-      {
-        name: 'planned',
-        label: 'Planned'
-      }
-    ],
+    activeMode: '',
+    modes: [],
     showWinner: false,
     category: {},
     movingAmount: null,
@@ -366,7 +377,8 @@ export default {
     isMovingEditorShown: false,
     mouseLeft: 0,
     mouseTop: 0,
-    categoryChanges: {}
+    categoryChanges: {},
+    active: false
   }),
   computed: {
     leftover() {
@@ -401,13 +413,54 @@ export default {
         this.draggingTo = null
         this.draggingItem = null
       }
+    },
+    doc() {
+      this.load()
     }
   },
   mounted() {
     this.startTutorial()
     this.now = new Date()
+    this.load()
   },
   methods: {
+    load() {
+      if (!this.doc) {
+        return
+      }
+
+      const modes = []
+
+      const active =
+        +this.now >= +getDateObect(this.doc.start) &&
+        +this.now <= +getDateObect(this.doc.end)
+
+      if (active) {
+        modes.push({
+          name: 'today',
+          label: 'Today'
+        })
+
+        this.activeMode = 'today'
+      }
+
+      modes.push({
+        name: 'left',
+        label: 'Left'
+      })
+
+      modes.push({
+        name: 'planned',
+        label: 'Planned'
+      })
+
+      if (!this.activeMode) {
+        this.activeMode = 'left'
+      }
+
+      this.modes = modes
+      this.active = active
+    },
     planned(envelope) {
       return this.doc?.planned[envelope] || 0
     },

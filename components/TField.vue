@@ -8,8 +8,19 @@
     <div :class="inputWrapperClasses">
       <slot name="top" />
       <slot>
-        <component
-          :is="getComponent()"
+        <textarea
+          v-if="type === 'textarea'"
+          :id="elementId"
+          ref="input"
+          v-bind="$attrs"
+          autocomplete="off"
+          :value.sync="value"
+          :class="inputClasses"
+          class="w-full block bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+          @input="input($event)"
+        />
+        <input
+          v-else
           :id="elementId"
           ref="input"
           v-bind="$attrs"
@@ -107,13 +118,6 @@ export default {
   methods: {
     input(event) {
       this.$emit('input', event.target.value)
-    },
-    getComponent() {
-      if (this.type === 'textarea') {
-        return 'textarea'
-      }
-
-      return 'input'
     }
   }
 }

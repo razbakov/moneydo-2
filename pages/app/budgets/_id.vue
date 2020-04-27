@@ -132,7 +132,6 @@ export default {
   data: () => ({
     name: '',
     month: '1',
-    leftover: '',
     start: '',
     end: '',
     income: '',
@@ -196,7 +195,6 @@ export default {
     fields: [
       'name',
       'month',
-      'leftover',
       'start',
       'end',
       'income',
@@ -231,15 +229,22 @@ export default {
           return Math.round((this.savings / this.income) * 100)
         }
 
-        return 20
+        return 0
       },
       set(val) {
+        if (this.mounting) {
+          return
+        }
+
         this.savings = Math.round((val / 100) * this.income)
       }
     },
+    leftover() {
+      return this.income - this.expenses - this.savings
+    },
     envelopesTotal() {
       return Object.values(this.planned).reduce(
-        (previous, current) => previous + current,
+        (previous, current) => +previous + parseInt(current || 0),
         0
       )
     },
@@ -259,6 +264,10 @@ export default {
   },
   watch: {
     month() {
+      if (this.mounting) {
+        return
+      }
+
       if (this.month === 'custom' || !this.month) {
         return
       }
@@ -283,8 +292,11 @@ export default {
       this.calculate()
     },
     income() {
-      this.savings = Math.round(this.income * 0.2)
+      if (this.mounting || this.editing) {
+        return
+      }
 
+      this.savings = Math.round(this.income * 0.2)
       this.calculate()
     },
     expenses() {
@@ -295,6 +307,8 @@ export default {
     }
   },
   async mounted() {
+    this.mounting = true
+
     this.now = new Date()
     this.month = getMonth(this.now) + 1
 
@@ -315,11 +329,10 @@ export default {
   },
   methods: {
     calculate() {
-      if (this.mounting) {
+      if (this.mounting || this.editing) {
         return
       }
 
-      this.leftover = this.income - this.expenses - this.savings
       let needs = Math.round(this.income * 0.5) - this.expenses
 
       if (needs <= 0) {

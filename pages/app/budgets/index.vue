@@ -22,6 +22,7 @@
       >
         <div
           class="bg-white flex items-center cursor-pointer hover:bg-gray-200 rounded shadow flex-grow px-4 py-2 text-lg text-black font-bold leading-tight"
+          :class="{ 'border border-brand-primary': budgetId === budget.id }"
           @click="selectBudget(budget.id)"
         >
           <div class="flex-grow">
@@ -62,14 +63,14 @@ export default {
   },
   setup() {
     const { docs: budgets } = useCollection('budgets')
-    const { updateAccount } = useAuth()
+    const { updateAccount, budgetId } = useAuth()
 
-    return { budgets, updateAccount, getDate }
+    return { budgets, updateAccount, getDate, budgetId }
   },
   methods: {
     getTotal(planned) {
       return Object.values(planned).reduce(
-        (previous, current) => previous + current,
+        (previous, current) => +previous + parseInt(current || 0),
         0
       )
     },
