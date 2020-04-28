@@ -27,7 +27,13 @@ const envelopes = [
 
 export default () => {
   function getEnvelope(name) {
-    return envelopes.find((e) => e.name === name)
+    const result = envelopes.find((e) => e.name === name)
+
+    if (!result) {
+      return {}
+    }
+
+    return result
   }
 
   return { envelopes, getEnvelope }

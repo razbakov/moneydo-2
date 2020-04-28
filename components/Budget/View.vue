@@ -134,7 +134,7 @@
 
         <router-link
           v-for="(category, categoryIndex) in categories"
-          :key="category.label"
+          :key="category.id"
           v-touch:touchhold="editCategory(category.id)"
           :to="`/app/${category.id}`"
         >

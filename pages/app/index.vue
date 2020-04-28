@@ -11,6 +11,7 @@ import BudgetTour from '~/components/Budget/Tour'
 import BudgetView from '~/components/Budget/View'
 
 export default {
+  name: 'AppIndex',
   components: {
     BudgetView,
     BudgetTour,

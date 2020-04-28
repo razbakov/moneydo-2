@@ -60,11 +60,6 @@ export default {
       }
     ]
   }),
-  mounted() {
-    if (!this.confirmedAccount) {
-      this.$nuxt.setLayout('empty')
-    }
-  },
   methods: {
     async save(data) {
       const changes = {
