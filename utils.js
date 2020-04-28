@@ -20,6 +20,10 @@ export const toDatetimeLocal = (date) => {
 export const getDateObect = (val) => {
   let date
 
+  if (!val) {
+    return null
+  }
+
   if (typeof val.toDate === 'function') {
     date = val.toDate()
   } else {
