@@ -174,6 +174,8 @@ export default () => {
 
     const lastLoginAt = new Date()
 
+    const pwaUsed = state.account.pwaUsed || features.pwa
+
     const daysUsed =
       (state.account.daysUsed || 0) +
       (isSameDay(getDateObect(state.account.lastLoginAt), lastLoginAt) ? 0 : 1)
@@ -183,7 +185,8 @@ export default () => {
       .doc(state.uid)
       .update({
         lastLoginAt,
-        daysUsed
+        daysUsed,
+        pwaUsed
       })
 
     if (!state.account.marketing) {
