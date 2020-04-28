@@ -74,7 +74,8 @@ export default {
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
     'portal-vue/nuxt',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    'nuxt-i18n'
   ],
   purgeCSS: {
     enabled: false
@@ -166,5 +167,9 @@ export default {
   sitemap: {
     hostname: app.url,
     routes: ['/']
+  },
+  i18n: {
+    locales: ['en', 'es', 'de', 'ru'],
+    defaultLocale: 'en'
   }
 }
