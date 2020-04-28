@@ -14,51 +14,74 @@
           </span>
         </router-link>
 
-        <TButton v-if="uid && account" type="secondary" to="/app" exact>
-          Open App
-        </TButton>
+        <div class="menu flex md:mt-0 items-center">
+          <router-link
+            v-for="nav in app.nav"
+            :key="nav.link"
+            :to="nav.link"
+            class="px-4 py-2 mx-4 md:block hidden"
+          >
+            {{ nav.label }}
+          </router-link>
 
-        <TButton v-if="!uid" type="secondary" to="/signup" exact>
-          Sign in
-        </TButton>
+          <TButton v-if="uid && account" type="secondary" to="/app" exact>
+            Open App
+          </TButton>
+
+          <TButton v-if="!uid" type="secondary" to="/signup" exact>
+            Sign in
+          </TButton>
+        </div>
       </nav>
     </header>
     <nuxt />
     <footer
-      class="md:flex text-center p-4 text-white bg-dark justify-end items-center"
+      class="md:flex text-center p-4 text-white bg-dark justify-between items-center"
     >
-      <div class="m-3 text-md font-bold">
-        Follow us
-      </div>
-      <div v-if="social.twitter" class="m-3">
-        <a
-          class="underline hover:no-underline hover:text-blue-500"
-          :href="`https://twitter.com/${social.twitter}`"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div class="menu md:mt-0 items-center">
+        <router-link
+          v-for="nav in app.nav"
+          :key="nav.link"
+          :to="nav.link"
+          class="px-4 py-2 mx-4"
         >
-          Twitter
-        </a>
+          {{ nav.label }}
+        </router-link>
       </div>
-      <div v-if="social.instagram" class="m-3">
-        <a
-          class="underline hover:no-underline hover:text-pink-500"
-          :href="`https://instagram.com/${social.instagram}`"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Instagram
-        </a>
-      </div>
-      <div v-if="social.facebook" class="m-3">
-        <a
-          class="underline hover:no-underline hover:text-blue-500"
-          :href="`https://facebook.com/${social.facebook}`"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Facebook
-        </a>
+      <div class="md:flex">
+        <div class="m-3 text-md font-bold">
+          Follow us
+        </div>
+        <div v-if="social.twitter" class="m-3">
+          <a
+            class="underline hover:no-underline hover:text-blue-500"
+            :href="`https://twitter.com/${social.twitter}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitter
+          </a>
+        </div>
+        <div v-if="social.instagram" class="m-3">
+          <a
+            class="underline hover:no-underline hover:text-pink-500"
+            :href="`https://instagram.com/${social.instagram}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>
+        </div>
+        <div v-if="social.facebook" class="m-3">
+          <a
+            class="underline hover:no-underline hover:text-blue-500"
+            :href="`https://facebook.com/${social.facebook}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Facebook
+          </a>
+        </div>
       </div>
     </footer>
   </div>

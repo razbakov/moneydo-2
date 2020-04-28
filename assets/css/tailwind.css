@@ -79,6 +79,10 @@ body {
   z-index: -1;
 }
 
+.menu .nuxt-link-exact-active {
+  @apply font-bold;
+}
+
 @tailwind utilities;
 
 /* purgecss end ignore */

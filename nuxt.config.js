@@ -9,7 +9,12 @@ const app = {
     facebook: '',
     slack: ''
   },
-  nav: [],
+  nav: [
+    {
+      label: 'Pricing',
+      link: '/pricing'
+    }
+  ],
   url: 'https://moneydo.netlify.app/',
   cover: '/cover/wide.png'
 }

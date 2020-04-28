@@ -1,16 +1,17 @@
 <template>
   <div>
     <main class="flex items-end justify-center w-screen mt-16">
-      <div>
+      <div class="p-4">
         <h1 class="font-bold text-4xl text-center leading-tight">
-          Your money under control
+          Personal budget made simple
         </h1>
         <p class="text-lg text-center mt-2">
-          Simple. Fast. Smart.
+          Have any expense tracker helped you to plan your budget and get
+          better?
         </p>
         <div class="flex justify-center mt-3 p-4 w-full md:flex">
           <TButton v-if="!uid" type="primary" to="/signup">
-            Start for free
+            Try for Free
           </TButton>
           <TButton v-else type="primary" to="/app/">
             Go to Dashboard
@@ -48,21 +49,21 @@
       </div>
     </div>
 
-    <div class="mt-8 conatiner md:max-w-4xl text-center mx-auto p-4">
+    <div class="mt-8 container md:max-w-4xl text-center mx-auto p-4">
       <h2 class="text-3xl font-semibold">
         Achieve more with a good strategy
       </h2>
       <div class="md:flex mx-auto p-4 text-center">
         <div class="md:w-1/2">
           <div class="p-4">
-            <h3 class="text-xl font-bold">Long-term planning</h3>
+            <h3 class="font-bold">Long-term planning</h3>
             <div>
               Set up a strategy for paying off a dept, achieve saving goals,
               plan expensive purchases and vacations with assistance.
             </div>
           </div>
           <div class="p-4">
-            <h3 class="text-xl font-bold">Mid-term planning</h3>
+            <h3 class="font-bold">Mid-term planning</h3>
             <div>
               Monthly goals (like buying new pair of shoes, gadget, etc.)
               followed up with course of action.
@@ -70,7 +71,7 @@
           </div>
 
           <div class="p-4">
-            <h3 class="text-xl font-bold">Short-term planning</h3>
+            <h3 class="font-bold">Short-term planning</h3>
             <div>
               Daily decisions made simple: Can I accept invitation of friends to
               join restaurant? How much can I spend today?
@@ -79,13 +80,13 @@
         </div>
         <div class="md:w-1/2">
           <div class="p-4">
-            <h3 class="text-xl font-bold">Adjust</h3>
+            <h3 class="font-bold">Adjust</h3>
             <div>
               Empty envelope? Don't worry — re-adjust the budget.
             </div>
           </div>
           <div class="p-4">
-            <h3 class="text-xl font-bold">Take a break</h3>
+            <h3 class="font-bold">Take a break</h3>
             <div>
               Forgot to track expenses for a while? Count what's left and
               continue from actual amount.
@@ -93,7 +94,7 @@
           </div>
 
           <div class="p-4">
-            <h3 class="text-xl font-bold">Restart anytime</h3>
+            <h3 class="font-bold">Restart anytime</h3>
             <div>
               Messed up? Start over from scratch in one click.
             </div>
