@@ -31,17 +31,27 @@
       </transition>
     </portal>
     <portal to="actions">
-      <TButton id="help" type="link" @click="$tours.expense.start()">
+      <TButton
+        id="help"
+        type="link"
+        @click="
+          activeExpense = '-'
+          $tours.expense.start()
+        "
+      >
         <TIcon name="help" />
       </TButton>
       <TButton type="link" @click="addExpense()">
         <TIcon name="add" />
       </TButton>
     </portal>
-    <main class="p-2 overflow-y-scroll" style="height: calc(100vh - 10rem)">
+    <main
+      id="expenses"
+      class="p-2 overflow-y-scroll"
+      style="height: calc(100vh - 10rem)"
+    >
       <div
         v-for="expense in expenses"
-        :id="`expense${expense.id}`"
         :key="expense.id"
         class="flex cursor-pointer border-dashed border-gray-500 border-b mb-2 justify-between items-center p-2"
         :class="{ 'bg-yellow-200': expense.id === activeExpense }"
@@ -148,7 +158,7 @@ export default {
         content: 'Change date of transaction if you forgot to do it right away'
       },
       {
-        target: '#expense0',
+        target: '#expenses',
         content:
           'Click on any transaction to edit. Click again to close the editor.'
       }
