@@ -290,7 +290,7 @@ export default {
   },
   setup(params) {
     const { account, updateAccount } = useAuth()
-    const { load, doc, loading, update: updateBudget } = useDoc('budgets')
+    const { load, doc, update: updateBudget } = useDoc('budgets')
     const { create, update, remove } = useDoc('categories')
     const { getById, docs: categories } = useCollection('categories')
     const { docs: expenses } = useCollection('expenses', {
@@ -314,7 +314,6 @@ export default {
 
     return {
       doc,
-      loading,
       categories,
       create,
       getById,

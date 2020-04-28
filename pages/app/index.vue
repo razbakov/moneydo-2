@@ -1,5 +1,5 @@
 <template>
-  <TLoader v-if="loading" />
+  <TLoader v-if="!account" />
   <BudgetTour v-else-if="!budgetId" />
   <BudgetView v-else :budget-id="budgetId" />
 </template>
@@ -19,11 +19,11 @@ export default {
   layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
   transition: 'slide-down',
   setup() {
-    const { loading, budgetId } = useAuth()
+    const { account, budgetId } = useAuth()
 
     return {
       budgetId,
-      loading
+      account
     }
   }
 }
