@@ -206,13 +206,13 @@ export default () => {
 
       await create({
         label: 'Groceries',
-        envelope: 'Needs',
+        envelope: 'needs',
         icon: 'fridge'
       })
 
       await create({
         label: 'Shopping',
-        envelope: 'Wants',
+        envelope: 'wants',
         icon: 'store'
       })
 
