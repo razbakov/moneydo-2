@@ -10,7 +10,7 @@
       <transition appear name="slide-up">
         <div
           v-if="category"
-          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between p-2 pl-1 md:bg-white"
+          class="w-full mt-2 mr-2 rounded shadow mb-2 flex justify-between md:px-4 p-2 pl-1 md:bg-white"
         >
           <div>
             <div
@@ -19,7 +19,7 @@
               {{ category.label }}
             </div>
             <div class="text-xs text-gray-400 md:text-brand-dark leading-none">
-              {{ category.envelope }}
+              {{ getEnvelope(category.envelope).label }}
             </div>
           </div>
           <div
@@ -114,6 +114,7 @@ import { computed } from '@vue/composition-api'
 import VDatePicker from 'v-calendar/lib/components/date-picker.umd'
 import useAuth from '~/use/auth'
 import useCollection from '~/use/collection'
+import useEnvelopes from '~/use/envelopes'
 import useDoc from '~/use/doc'
 import useRouter from '~/use/router'
 import { getDateTime } from '~/utils'
@@ -173,6 +174,8 @@ export default {
         .filter((e) => e.budget === budgetId.value)
     )
 
+    const { getEnvelope } = useEnvelopes()
+
     return {
       budgetId,
       loading,
@@ -184,7 +187,8 @@ export default {
       getById,
       account,
       updateAccount,
-      remove
+      remove,
+      getEnvelope
     }
   },
   mounted() {
