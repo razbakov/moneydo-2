@@ -59,7 +59,7 @@
       :title="activeExpense === '-' ? 'Add Expense' : 'Edit Expense'"
       @close="activeExpense = false"
     >
-      <form class="p-2" @submit="updateExpense">
+      <form @submit="updateExpense">
         <div class="flex">
           <input
             id="input"
