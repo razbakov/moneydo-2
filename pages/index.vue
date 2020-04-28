@@ -3,18 +3,17 @@
     <main class="flex items-end justify-center w-screen mt-16">
       <div class="p-4">
         <h1 class="font-bold text-4xl text-center leading-tight">
-          Personal budget made simple
+          {{ $t('home.title') }}
         </h1>
         <p class="text-lg text-center mt-2">
-          Have any expense tracker helped you to plan your budget and get
-          better?
+          {{ $t('home.subtitle') }}
         </p>
         <div class="flex justify-center mt-3 p-4 w-full md:flex">
           <TButton v-if="!uid" type="primary" to="/signup">
-            Try for Free
+            {{ $t('trial.start') }}
           </TButton>
           <TButton v-else type="primary" to="/app/">
-            Go to Dashboard
+            {{ $t('dashboard.from_home') }}
           </TButton>
         </div>
       </div>
@@ -25,26 +24,12 @@
     </div>
 
     <div class="conatiner md:max-w-4xl md:flex mx-auto p-4 text-center">
-      <div class="md:w-1/3 p-4">
-        <h3 class="text-2xl font-semibold">Simple</h3>
+      <div v-for="i in [1, 2, 3]" :key="`benefit-${i}`" class="md:w-1/3 p-4">
+        <h3 class="text-2xl font-semibold">
+          {{ $t(`home.benefits.${i}.title`) }}
+        </h3>
         <div class="text-lg">
-          Classic budgets are huge, but you can gain more control over your
-          pocket with only 4&nbsp;envelopes.
-        </div>
-      </div>
-      <div class="md:w-1/3 p-4">
-        <h3 class="text-2xl font-semibold">Smart</h3>
-        <div class="text-lg">
-          Track only your irregular spendings on things you don’t want to plan.
-          Calculate your regular expenses once a month only and let your bank do
-          the rest.
-        </div>
-      </div>
-      <div class="md:w-1/3 p-4">
-        <h3 class="text-2xl font-semibold">Fast</h3>
-        <div class="text-lg">
-          Enjoy conversation with friends, while adding a new expense in
-          2&nbsp;clicks.
+          {{ $t(`home.benefits.${i}.description`) }}
         </div>
       </div>
     </div>

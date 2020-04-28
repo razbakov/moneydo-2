@@ -3,19 +3,17 @@
     <main class="flex items-end justify-center w-screen mt-16">
       <div class="container mx-auto md:max-w-lg mb-8 p-4">
         <h1 class="font-bold text-4xl text-center leading-tight">
-          We'll help you save more. See for yourself with a 30-day free trial.
+          {{ $t('pricing.title') }}
         </h1>
         <p class="text-center mt-2">
-          For just <span class="font-bold">3€ per month</span> you get access to
-          a web app with seamless syncing of your data. All we need is your
-          email to start your 30-day free trial, no credit card required.
+          {{ $t('pricing.subtitle') }}
         </p>
         <div class="flex justify-center mt-3 p-4 w-full md:flex">
           <TButton v-if="!uid" type="primary" to="/signup">
-            Sign Up
+            {{ $t('auth.signin') }}
           </TButton>
           <TButton v-else type="primary" to="/app/">
-            Go to Dashboard
+            {{ $t('dashboard.from_home') }}
           </TButton>
         </div>
       </div>

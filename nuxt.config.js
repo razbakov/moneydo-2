@@ -1,4 +1,22 @@
+import req from 'require-yml'
+
 const isProd = process.env.NODE_ENV === 'production'
+
+const messages = req('./i18n/')
+
+function getLocales() {
+  const langs = Object.keys(messages)
+  const result = []
+
+  for (const lang of langs) {
+    result.push({
+      code: lang,
+      name: messages[lang].name
+    })
+  }
+
+  return result
+}
 
 const app = {
   name: 'MoneyDo',
@@ -11,7 +29,7 @@ const app = {
   },
   nav: [
     {
-      label: 'Pricing',
+      name: 'pricing',
       link: '/pricing'
     }
   ],
@@ -169,7 +187,17 @@ export default {
     routes: ['/']
   },
   i18n: {
-    locales: ['en', 'es', 'de', 'ru'],
-    defaultLocale: 'en'
+    locales: getLocales(),
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages
+    },
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      fallbackLocale: 'en',
+      alwaysRedirect: true
+    }
   }
 }

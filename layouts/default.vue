@@ -5,7 +5,7 @@
     <header>
       <nav class="flex items-center justify-between flex-wrap p-6">
         <router-link
-          to="/"
+          :to="localePath('/')"
           class="no-underline flex items-center justify-center leading-none hover:no-underline text-4xl"
         >
           <TIcon class="h-12 w-12" name="logo" />
@@ -18,18 +18,28 @@
           <router-link
             v-for="nav in app.nav"
             :key="nav.link"
-            :to="nav.link"
+            :to="localePath(nav.link)"
             class="px-4 py-2 mx-4 md:block hidden"
           >
-            {{ nav.label }}
+            {{ $t(`${nav.name}.nav`) }}
           </router-link>
 
-          <TButton v-if="uid && account" type="secondary" to="/app" exact>
-            Open App
+          <TButton
+            v-if="uid && account"
+            type="secondary"
+            :to="localePath('/app')"
+            exact
+          >
+            {{ $t('app.open') }}
           </TButton>
 
-          <TButton v-if="!uid" type="secondary" to="/signup" exact>
-            Sign in
+          <TButton
+            v-if="!uid"
+            type="secondary"
+            :to="localePath('/signup')"
+            exact
+          >
+            {{ $t('auth.signin') }}
           </TButton>
         </div>
       </nav>
@@ -45,10 +55,20 @@
           :to="nav.link"
           class="px-4 py-2 mx-4"
         >
-          {{ nav.label }}
+          {{ $t(`${nav.name}.nav`) }}
         </router-link>
       </div>
-      <div class="md:flex">
+      <div class="md:flex mt-8 md:mt-0">
+        <nuxt-link
+          v-for="locale in $i18n.locales"
+          :key="locale.code"
+          :to="switchLocalePath(locale.code)"
+          class="block p-2"
+          :class="{ 'font-bold': $i18n.locale === locale.code }"
+          >{{ locale.name }}</nuxt-link
+        >
+      </div>
+      <div class="md:flex mt-8 md:mt-0">
         <div class="m-3 text-md font-bold">
           Follow us
         </div>
@@ -100,11 +120,6 @@ export default {
   data: () => ({
     isMenuOpen: false
   }),
-  watch: {
-    $route() {
-      this.isMenuOpen = false
-    }
-  },
   setup() {
     const { uid, account } = useAuth()
 
@@ -116,6 +131,11 @@ export default {
       account,
       app,
       social
+    }
+  },
+  watch: {
+    $route() {
+      this.isMenuOpen = false
     }
   }
 }
