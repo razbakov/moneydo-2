@@ -54,18 +54,19 @@
         <div class="font-mono">{{ expense.amount }}</div>
       </div>
     </main>
-    <transition appear name="slide-up">
-      <form
-        v-if="activeExpense"
-        class="fixed bottom-0 w-full md:max-w-md bg-white rounded-t shadow-top p-2"
-        @submit="updateExpense"
-      >
+    <TPopup
+      v-if="activeExpense"
+      :title="activeExpense === '-' ? 'Add Expense' : 'Edit Expense'"
+      @close="activeExpense = false"
+    >
+      <form class="p-2" @submit="updateExpense">
         <div class="flex">
           <input
             id="input"
             v-model="expenseChanges.amount"
             v-focus
             type="tel"
+            placeholder="Amount"
             autocomplete="off"
             class="w-1/3 mr-2 bg-gray-200 appearance-none font-mono border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           />
@@ -100,7 +101,7 @@
           <VDatePicker v-model="expenseChanges.date" is-inline />
         </div>
       </form>
-    </transition>
+    </TPopup>
     <v-tour
       name="expense"
       :steps="steps"
@@ -121,6 +122,7 @@ import { getDateTime } from '~/utils'
 import TIcon from '~/components/TIcon'
 import TButton from '~/components/TButton'
 import TLoader from '~/components/TLoader'
+import TPopup from '~/components/TPopup'
 
 export default {
   layout: (ctx) => (ctx.isMobile ? 'mobile' : 'desktop'),
@@ -128,7 +130,8 @@ export default {
     TIcon,
     VDatePicker,
     TButton,
-    TLoader
+    TLoader,
+    TPopup
   },
   data: () => ({
     steps: [
