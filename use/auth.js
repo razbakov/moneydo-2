@@ -2,6 +2,7 @@ import Vue from 'vue'
 import features from 'platform-detect'
 import ls from 'local-storage'
 import { utm } from 'url-utm-params'
+import { isSameDay } from 'date-fns'
 import { toRefs, computed } from '@vue/composition-api'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -9,6 +10,7 @@ import 'firebase/firestore'
 import clean from 'lodash-clean'
 import useRouter from '~/use/router'
 import useDoc from '~/use/doc'
+import { getDateObect } from '~/utils'
 
 const state = Vue.observable({
   loading: true,
@@ -169,6 +171,20 @@ export default () => {
 
       await loadAccount()
     }
+
+    const lastLoginAt = new Date()
+
+    const daysUsed =
+      (state.account.daysUsed || 0) +
+      (isSameDay(getDateObect(state.account.lastLoginAt), lastLoginAt) ? 0 : 1)
+
+    await firestore
+      .collection('accounts')
+      .doc(state.uid)
+      .update({
+        lastLoginAt,
+        daysUsed
+      })
 
     if (!state.account.marketing) {
       await firestore
