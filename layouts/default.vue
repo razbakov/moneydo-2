@@ -30,7 +30,7 @@
             :to="localePath('/app')"
             exact
           >
-            {{ $t('app.open') }}
+            {{ $t('app.nav') }}
           </TButton>
 
           <TButton
