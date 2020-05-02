@@ -19,11 +19,12 @@ const state = Vue.observable({
   profile: null,
   account: null,
   initialized: false,
-  marketing: null
+  marketing: null,
+  error: null
 })
 
 export default () => {
-  const { router } = useRouter()
+  const { router, route } = useRouter()
 
   let isAdmin = false
 
@@ -39,7 +40,7 @@ export default () => {
     firebase.auth().onAuthStateChanged(setUser)
 
     if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-      signInWithEmailLink(window.location.href)
+      signInWithEmailLink()
     }
 
     state.initialized = true
@@ -332,56 +333,39 @@ export default () => {
     setUser(null)
 
     state.loading = false
+    state.signingIn = false
+    state.error = null
 
-    router.replace('/')
+    router.replace('/signup')
   }
 
   async function signInAnonymously() {
     await firebase.auth().signInAnonymously()
   }
 
-  async function signInWithEmailLink(link) {
+  async function signInWithEmailLink() {
+    const link = window.location.href
+
     state.signingIn = true
 
-    // Additional state parameters can also be passed via URL.
-    // This can be used to continue the user's intended action before triggering
-    // the sign-in operation.
-    // Get the email if available. This should be available if the user completes
-    // the flow on the same device where they started it.
-    let email = ls('emailForSignIn')
-    if (!email) {
-      // User opened the link on a different device. To prevent session fixation
-      // attacks, ask the user to provide the associated email again. For example:
-      email = window.prompt('Please provide your email for confirmation')
+    const email = route.query.email
+
+    try {
+      await firebase.auth().signInWithEmailLink(email, link)
+    } catch (e) {
+      state.error = e
     }
 
-    // The client SDK will parse the code from the link for you.
-    await firebase.auth().signInWithEmailLink(email, link)
-
     state.signingIn = false
-
-    // Clear email from storage.
-    ls.remove('emailForSignIn')
-
-    // You can access the new user via result.user
-    // Additional user info profile not available via:
-    // result.additionalUserInfo.profile == null
-    // You can check if the user is new or existing:
-    // result.additionalUserInfo.isNewUser
   }
 
   async function sendSignInLinkToEmail(email) {
     const actionCodeSettings = {
-      url: window.location.href,
+      url: window.location.href + '?email=' + email,
       handleCodeInApp: true
     }
 
     await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-
-    // The link was successfully sent. Inform the user.
-    // Save the email locally so you don't need to ask the user for it again
-    // if they open the link on the same device.
-    ls('emailForSignIn', email)
   }
 
   function signInWithGoogle() {

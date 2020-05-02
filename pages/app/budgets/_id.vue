@@ -363,15 +363,15 @@ export default {
       })
 
       if (!this.editing) {
-        this.create(changes)
-
-        this.updateAccount({
-          budgetId: this.id
+        this.create(changes).then((doc) => {
+          this.updateAccount({
+            budgetId: doc.id
+          })
+          this.$router.push('/app/')
         })
       } else {
         this.update(this.budgetId, changes)
       }
-
       this.$router.push('/app/budgets')
     }
   }

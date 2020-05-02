@@ -57,6 +57,7 @@
         >
           {{ $t(`${nav.name}.nav`) }}
         </router-link>
+        <a href="mailto:moneydo@razbakov.com">Support</a>
       </div>
       <div class="md:flex mt-8 md:mt-0">
         <nuxt-link

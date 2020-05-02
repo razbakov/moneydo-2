@@ -1,10 +1,27 @@
 <template>
   <div class="container mx-auto md:max-w-lg md:mb-16">
     <main class="card">
-      <TLoader v-if="loading || signingIn" />
+      <div v-if="error">
+        <div class="typo">
+          <h2>Oops</h2>
+          <p class="text-brand-fail">{{ error }}</p>
+        </div>
+        <TButton type="secondary" @click="signOut">
+          Try Again
+        </TButton>
+      </div>
+      <TLoader v-else-if="loading || signingIn" />
       <div v-else-if="emailSent" class="typo">
         <h2>Almost there</h2>
         <p>Check your email and click the invitation link.</p>
+        <p class="text-brand-fail">
+          We currently do not support web.de emails.
+        </p>
+        <p>
+          We are in beta now, please report if you have any issues to
+          <a href="mailto:moneydo@razbakov.com">moneydo@razbakov.com</a> and we
+          will fix them ASAP.
+        </p>
       </div>
       <div v-else>
         <div class="typo">
@@ -67,7 +84,8 @@ export default {
       signingIn,
       signInWithGoogle,
       sendSignInLinkToEmail,
-      signOut
+      signOut,
+      error
     } = useAuth()
 
     return {
@@ -76,7 +94,8 @@ export default {
       signingIn,
       signInWithGoogle,
       sendSignInLinkToEmail,
-      signOut
+      signOut,
+      error
     }
   },
   watch: {

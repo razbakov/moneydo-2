@@ -23,8 +23,8 @@ const app = {
   description: 'Budget Planner and Expense Tracker',
   social: {
     twitter: 'MoneyDoApp',
-    instagram: '',
-    facebook: '',
+    instagram: 'moneydoapp',
+    facebook: 'moneyDo-112938060395146',
     slack: ''
   },
   nav: [
