@@ -365,7 +365,11 @@ export default () => {
       handleCodeInApp: true
     }
 
-    await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+    try {
+      await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+    } catch (e) {
+      state.error = e
+    }
   }
 
   function signInWithGoogle() {
