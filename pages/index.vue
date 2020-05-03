@@ -1,6 +1,8 @@
 <template>
   <div>
-    <main class="flex items-end justify-center w-screen mt-16">
+    <main
+      class="flex items-end justify-center w-screen mt-16 md:max-w-2xl mx-auto"
+    >
       <div class="p-4">
         <h1 class="font-bold text-4xl text-center leading-tight">
           {{ $t('home.title') }}
@@ -19,17 +21,77 @@
       </div>
     </main>
 
-    <div class="flex justify-center my-16">
-      <img src="/screens/app.png" alt="App Screenshot" class="h-screen" />
+    <div class="mt-16 md:max-w-lg mx-auto p-4 text-center">
+      <h3 class="text-2xl font-semibold">
+        What is Kakeibo?
+      </h3>
+      <div class="text-left mt-4 typo">
+        <p>
+          The Japanese tradition of using a kakeibo, which translates to
+          “household finance ledger,” offers an easy solution to mindless
+          spending habits. This budgeting system combines tracking purchases
+          with the habit of mindfulness in order to reign in unnecessary
+          spending and help you achieve savings goals.
+        </p>
+        <p>
+          The four category system helps kakeibo users become more mindful of
+          their spending habits and avoid wasting money on things that don’t
+          align with their goals.
+        </p>
+        <p>
+          A kakeibo is an excellent tool for those who are interested in
+          minimalism. Its special attention to mindfulness separates it from
+          other budgeting systems, making it a good match for those who want to
+          ensure their money goes toward the things that bring joy to their
+          lives.
+        </p>
+        <p>Some benefits of kakeibo are:</p>
+        <ul>
+          <li>
+            It simplifies finances by grouping spending into four distinct
+            categories.
+          </li>
+          <li>It encourages realistic monthly savings goals.</li>
+          <li>It pays attention to present, past and future.</li>
+          <li>
+            It encourages saving small amounts daily rather than occasional big
+            sums.
+          </li>
+          <li>It celebrates small achievements.</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="conatiner md:max-w-4xl md:flex mx-auto p-4 text-center">
-      <div v-for="i in [1, 2, 3]" :key="`benefit-${i}`" class="md:w-1/3 p-4">
-        <h3 class="text-2xl font-semibold">
-          {{ $t(`home.benefits.${i}.title`) }}
-        </h3>
-        <div class="text-lg">
-          {{ $t(`home.benefits.${i}.description`) }}
+    <div class="mt-16 md:max-w-2xl mx-auto p-4 text-center">
+      <h3 class="text-2xl font-semibold">
+        Why MoneyDo?
+      </h3>
+      <div class="mt-8 flex items-center">
+        <div class="text-left mr-4 w-1/2 typo">
+          <ul>
+            <li>establish your budget with recommendations</li>
+            <li>
+              calculate daily limits
+            </li>
+            <li>
+              add expense: click-type-click
+            </li>
+            <li>
+              re-adjust budget with drag-type-click
+            </li>
+            <li>
+              mobile and desktop
+            </li>
+            <li>
+              available offline
+            </li>
+            <li>
+              install in 10 seconds (less than 1 MB)
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-center w-1/2">
+          <img src="/screens/app.png" alt="App Screenshot" />
         </div>
       </div>
     </div>

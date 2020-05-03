@@ -1,22 +1,4 @@
-import req from 'require-yml'
-
 const isProd = process.env.NODE_ENV === 'production'
-
-const messages = req('./i18n/')
-
-function getLocales() {
-  const langs = Object.keys(messages)
-  const result = []
-
-  for (const lang of langs) {
-    result.push({
-      code: lang,
-      name: messages[lang].name
-    })
-  }
-
-  return result
-}
 
 const app = {
   name: 'MoneyDo',
@@ -145,6 +127,11 @@ export default {
           }
         ]
       })
+
+      config.module.rules.push({
+        test: /\.yml$/,
+        use: 'js-yaml-loader'
+      })
     }
   },
   env: {
@@ -187,11 +174,17 @@ export default {
     routes: ['/']
   },
   i18n: {
-    locales: getLocales(),
+    locales: [
+      { code: 'en', name: 'English', file: 'en.yml' },
+      { code: 'de', name: 'Deutsch', file: 'de.yml' },
+      { code: 'ru', name: 'Русский', file: 'ru.yml' },
+      { code: 'es', name: 'Español', file: 'es.yml' }
+    ],
     defaultLocale: 'en',
+    langDir: 'langs/',
+    lazy: true,
     vueI18n: {
-      fallbackLocale: 'en',
-      messages
+      fallbackLocale: 'en'
     },
     detectBrowserLanguage: {
       useCookie: true,
