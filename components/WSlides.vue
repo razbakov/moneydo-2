@@ -1,25 +1,23 @@
 <template>
-  <div
-    class="p-4 rounded-lg border bg-brand-primary text-white relative shadow-lg"
-  >
+  <div class="border text-brand-black relative mb-8">
     <button
-      class="absolute left-0 mt-40 ml-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-white"
+      class="absolute left-0 mt-40 ml-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-primary"
       @click="dec"
     >
       <TIcon name="back" />
     </button>
     <button
-      class="absolute right-0 mt-40 mr-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-white"
+      class="absolute right-0 mt-40 mr-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-primary"
       @click="inc"
     >
       <TIcon name="forward" />
     </button>
 
-    <div class="flex justify-center items-center mb-2">
+    <div class="text-center mb-2">
       <div
         v-for="(slide, index) in slides"
         :key="index"
-        class=""
+        class="block"
         :class="current === index ? 'block' : 'hidden'"
       >
         <div
@@ -27,8 +25,12 @@
         >
           <div>{{ slide.title }}</div>
         </div>
-        <div>
-          <img class="h-64" :src="slide.image" :alt="slide.title" />
+        <div class="text-center">
+          <img
+            class="inline-block h-64"
+            :src="slide.image"
+            :alt="slide.title"
+          />
         </div>
       </div>
     </div>

@@ -1,23 +1,19 @@
 ---
-title: Your budget in a mindful and simple way
-subtitle: Plan personal budget and track daily expenses with kakeibo
-ctaLabel: Try for free
-cta: /signup
 features:
   - title: Establish your budget with recommendations
-    image: /screens/app.png
+    image: /screens/budget.gif
   - title: Calculate daily limits
-    image: /screens/app.png
+    image: /screens/daily.png
   - title: Add expense in one click
-    image: /screens/app.png
-  - title: Re-adjust budget with drag-type-click
-    image: /screens/app.png
+    image: /screens/expense.gif
+  - title: Re-adjust budget with drag-n-drop
+    image: /screens/adjust.gif
   - title: Mobile and desktop
-    image: /screens/app.png
+    image: /screens/daily.png
   - title: Available offline
-    image: /screens/app.png
+    image: /screens/daily.png
   - title: Install in 10 seconds (less than 1 MB)
-    image: /screens/app.png
+    image: /screens/daily.png
 benefits:
   - title: Long-term planning
     description: Set up a strategy for paying off a dept, achieve saving goals, plan expensive purchases and vacations with assistance.
@@ -33,8 +29,19 @@ benefits:
     description: Messed up? Start over from scratch in one click.
 ---
 
-<w-slides :slides="features"></w-slides>
+<w-hero
+  class="p-4 mx-auto max-w-lg"
+  title="Your budget in a mindful and simple way"
+  subtitle="Plan personal budget and track daily expenses with kakeibo"
+  button="Try for free"
+  to="/signup"></w-hero>
+
+<w-slides :slides="features" class="p-4 mx-auto max-w-lg"></w-slides>
+
+<div class="p-4 mx-auto max-w-xl typo">
 
 ## Achieve more with a good strategy
 
-<w-list :items="benefits">
+<w-list :items="benefits"></w-list>
+
+</div>

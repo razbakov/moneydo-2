@@ -7,6 +7,7 @@ import WGrid from '~/components/WGrid'
 import WBlock from '~/components/WBlock'
 import WSlides from '~/components/WSlides'
 import WList from '~/components/WList'
+import WHero from '~/components/WHero'
 
 Vue.component('WScreenshot', WScreenshot)
 Vue.component('WGrid', WGrid)
@@ -14,6 +15,7 @@ Vue.component('WFlex', WFlex)
 Vue.component('WBlock', WBlock)
 Vue.component('WSlides', WSlides)
 Vue.component('WList', WList)
+Vue.component('WHero', WHero)
 
 Vue.directive('focus', {
   inserted: (el) => {
