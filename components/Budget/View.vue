@@ -549,9 +549,10 @@ export default {
       const planned = this.doc?.planned
 
       planned[this.draggingItem] =
-        +planned[this.draggingItem] - this.movingAmount
+        parseInt(planned[this.draggingItem]) - parseInt(this.movingAmount)
 
-      planned[this.draggingTo] = +planned[this.draggingTo] + this.movingAmount
+      planned[this.draggingTo] =
+        parseInt(planned[this.draggingTo]) + parseInt(this.movingAmount)
 
       this.updateBudget(this.budgetId, {
         planned
