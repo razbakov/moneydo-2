@@ -32,7 +32,7 @@ import useAuth from '~/use/auth'
 
 export default {
   async asyncData({ $content, params, error }) {
-    const slug = params.slug || 'index'
+    const slug = params.slug
 
     let page = {}
 
