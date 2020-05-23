@@ -13,5 +13,9 @@ home.benefits.2.description: 'Track only your irregular spendings on things you 
 home.benefits.3.title: 'Faster'
 home.benefits.3.description: 'Enjoy conversation with friends, while adding a new expense in 2 clicks.'
 pricing.nav: 'Pricing'
+privacy.nav: 'Privacy'
+kakeibo.nav: 'Kakeibo'
+terms.nav: 'Terms'
+support.nav: 'Support'
 pricing.title: "We'll help you save more. See for yourself with a 30-day free trial."
 pricing.subtitle: 'For just 3€ per month you get access to a web app with seamless syncing of your data. All we need is your email to start your 30-day free trial, no credit card required.'

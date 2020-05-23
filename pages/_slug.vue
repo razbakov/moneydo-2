@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="mt-16 md:max-w-lg mx-auto p-4 typo">
+    <div class="mb-8 md:max-w-lg mx-auto p-4 typo">
       <nuxt-content :document="page" />
     </div>
   </div>
@@ -32,7 +32,7 @@ import useAuth from '~/use/auth'
 
 export default {
   async asyncData({ $content, params, error }) {
-    const slug = 'index'
+    const slug = params.slug
 
     let page = {}
 
