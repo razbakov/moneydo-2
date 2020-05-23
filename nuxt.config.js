@@ -13,6 +13,18 @@ const app = {
     {
       name: 'pricing',
       link: '/pricing'
+    },
+    {
+      name: 'terms',
+      link: '/terms'
+    },
+    {
+      name: 'privacy',
+      link: '/privacy'
+    },
+    {
+      name: 'support',
+      link: '/support'
     }
   ],
   url: 'https://moneydo.netlify.app/',
@@ -20,6 +32,7 @@ const app = {
 }
 
 export default {
+  components: true,
   mode: 'spa',
   /*
    ** Headers of the page
@@ -75,7 +88,8 @@ export default {
     '@nuxtjs/sitemap',
     'portal-vue/nuxt',
     '@nuxtjs/device',
-    'nuxt-i18n'
+    'nuxt-i18n',
+    '@nuxt/content'
   ],
   purgeCSS: {
     enabled: false

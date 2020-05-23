@@ -45,31 +45,18 @@
       </nav>
     </header>
     <nuxt />
-    <footer
-      class="md:flex text-center p-4 text-white bg-dark justify-between items-center"
-    >
-      <div class="menu md:mt-0 items-center">
+    <footer class="md:flex p-4 text-white bg-dark justify-evenly">
+      <div class="menu text-left">
         <router-link
           v-for="nav in app.nav"
           :key="nav.link"
           :to="nav.link"
-          class="px-4 py-2 mx-4"
+          class="block px-4 py-2"
         >
           {{ $t(`${nav.name}.nav`) }}
         </router-link>
-        <a href="mailto:moneydo@razbakov.com">Support</a>
       </div>
-      <div class="md:flex mt-8 md:mt-0">
-        <nuxt-link
-          v-for="locale in $i18n.locales"
-          :key="locale.code"
-          :to="switchLocalePath(locale.code)"
-          class="block p-2"
-          :class="{ 'font-bold': $i18n.locale === locale.code }"
-          >{{ locale.name }}</nuxt-link
-        >
-      </div>
-      <div class="md:flex mt-8 md:mt-0">
+      <div class="mt-8 md:mt-0">
         <div class="m-3 text-md font-bold">
           Follow us
         </div>
@@ -121,6 +108,22 @@ export default {
   data: () => ({
     isMenuOpen: false
   }),
+  computed: {
+    lang: {
+      get() {
+        return this.$i18n.locale
+      },
+      set(val) {
+        this.switchLocalePath(val)
+      }
+    },
+    localesDropdown() {
+      return this.$i18n.locales.map((locale) => ({
+        value: locale.code,
+        label: locale.name
+      }))
+    }
+  },
   setup() {
     const { uid, account } = useAuth()
 
