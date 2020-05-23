@@ -1,12 +1,6 @@
-# GutenAbend
+# MoneyDo
 
-Online Kantine - https://gutenabend.netlify.com/
-
-- Sign in (Google or magic link)
-- Create an account
-- Manage meetups (add, edit, remove)
-- Manage ideas (add, edit, remove)
-- RSVP (record a response, see list)
+Plan budget and track expenses - https://moneydo.netlify.app/
 
 ## Built with
 
@@ -23,12 +17,4 @@ yarn install
 
 # serve with hot reload at localhost:3000
 yarn dev
-```
-
-## Configuration
-
-Mailgun
-
-```bash
-firebase functions:config:set mailgun.key="" mailgun.domain="" mailgun.host=""
 ```
