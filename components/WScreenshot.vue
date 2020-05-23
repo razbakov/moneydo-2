@@ -1,9 +1,9 @@
 <template>
   <div class="mt-8 flex items-center">
     <div class="text-left mr-4 w-1/2">
-      {{ alt }}
+      <slot />
     </div>
-    <div class="flex justify-center w-1/2">
+    <div v-if="src" class="flex justify-center w-1/2">
       <img :src="src" :alt="alt" />
     </div>
   </div>
@@ -11,7 +11,6 @@
 
 <script>
 export default {
-  name: 'widget-screenshot',
   props: {
     src: {
       type: String,
@@ -19,7 +18,7 @@ export default {
     },
     alt: {
       type: String,
-      default: ''
+      default: 'Widget'
     }
   }
 }

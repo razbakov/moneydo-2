@@ -1,6 +1,7 @@
 <template>
   <div>
-    <main
+    <div
+      v-if="page.subtitle"
       class="flex items-end justify-center w-screen mt-16 md:max-w-2xl mx-auto"
     >
       <div class="p-4">
@@ -19,8 +20,8 @@
           </TButton>
         </div>
       </div>
-    </main>
-    <div class="mt-16 md:max-w-lg mx-auto p-4 typo">
+    </div>
+    <div class="mb-8 md:max-w-lg mx-auto p-4 typo">
       <nuxt-content :document="page" />
     </div>
   </div>
@@ -30,8 +31,16 @@
 import useAuth from '~/use/auth'
 
 export default {
-  async asyncData({ $content }) {
-    const page = await $content('pages', 'home').fetch()
+  async asyncData({ $content, params, error }) {
+    const slug = params.slug || 'index'
+
+    let page = {}
+
+    try {
+      page = await $content(slug).fetch()
+    } catch (e) {
+      error({ statusCode: 404, message: 'Page not found' })
+    }
 
     return {
       page

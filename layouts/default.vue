@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-sans leading-normal tracking-normal antialiased min-h-screen"
+    class="font-sans leading-normal tracking-normal antialiased min-h-screen flex flex-col"
   >
     <header>
       <nav class="flex items-center justify-between flex-wrap p-6">
@@ -44,8 +44,10 @@
         </div>
       </nav>
     </header>
-    <nuxt />
-    <footer class="md:flex p-4 text-white bg-dark justify-evenly">
+    <div class="flex-grow">
+      <nuxt />
+    </div>
+    <footer class="md:flex mt-8 p-4 text-white bg-dark justify-evenly">
       <div class="menu text-left">
         <router-link
           v-for="nav in app.nav"

@@ -11,6 +11,10 @@ const app = {
   },
   nav: [
     {
+      name: 'kakeibo',
+      link: '/kakeibo'
+    },
+    {
       name: 'pricing',
       link: '/pricing'
     },
