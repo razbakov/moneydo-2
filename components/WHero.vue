@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex items-end justify-center w-screen mt-16 md:max-w-2xl mx-auto"
-  >
+  <div class="flex items-end justify-center my-16">
     <div class="p-4">
       <h1 class="font-bold text-4xl text-center leading-tight">
         {{ title }}

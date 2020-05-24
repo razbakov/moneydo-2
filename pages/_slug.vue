@@ -25,9 +25,7 @@ export default {
   },
   computed: {
     classes() {
-      let classes = this.page.container
-        ? this.page.container
-        : 'p-4 mx-auto max-w-2xl '
+      let classes = this.page.container || 'p-4 mx-auto max-w-3xl '
 
       classes += this.page.notypo ? '' : 'typo'
 
