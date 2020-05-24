@@ -36,7 +36,7 @@ benefits:
   button="Try for free"
   to="/signup"></w-hero>
 
-<w-slides :slides="features" class="p-4 mx-auto max-w-lg"></w-slides>
+<w-slides :slides="features" class="p-4 mx-auto max-w-2xl"></w-slides>
 
 <div class="p-4 mx-auto max-w-xl typo">
 

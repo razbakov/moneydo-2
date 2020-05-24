@@ -1,38 +1,29 @@
 <template>
-  <div class="border text-brand-black relative mb-8">
-    <button
-      class="absolute left-0 mt-40 ml-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-primary"
-      @click="dec"
-    >
-      <TIcon name="back" />
-    </button>
-    <button
-      class="absolute right-0 mt-40 mr-2 w-6 h-6 text-brand-black rounded-full flex justify-center content-center hover:text-brand-primary"
-      @click="inc"
-    >
-      <TIcon name="forward" />
-    </button>
-
-    <div class="text-center mb-2">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="block"
-        :class="current === index ? 'block' : 'hidden'"
-      >
-        <div
-          class="font-bold mb-6 h-16 text-2xl leading-tight text-center flex justify-center items-center"
+  <div class="grid grid-cols-12 gap-4 p-4">
+    <div class="col-span-5 flex items-center">
+      <div @mouseleave="restart">
+        <button
+          v-for="(slide, index) in slides"
+          :key="index"
+          class="block text-left w-full py-2 px-4 hover:bg-brand-primary"
+          :class="
+            current === index
+              ? 'bg-brand-primary text-white'
+              : 'bg-brand-primary+2'
+          "
+          @mouseover="goto(index)"
         >
-          <div>{{ slide.title }}</div>
-        </div>
-        <div class="text-center">
-          <img
-            class="inline-block h-64"
-            :src="slide.image"
-            :alt="slide.title"
-          />
-        </div>
+          {{ slide.title }}
+        </button>
       </div>
+    </div>
+    <div
+      v-for="(slide, index) in slides"
+      :key="index"
+      class="block text-center align-middle col-span-7"
+      :class="current === index ? 'block' : 'hidden'"
+    >
+      <img class="inline-block" :src="slide.image" :alt="slide.title" />
     </div>
   </div>
 </template>
@@ -46,7 +37,11 @@ export default {
     },
     auto: {
       type: Boolean,
-      default: false
+      default: true
+    },
+    interval: {
+      type: Number,
+      default: 2000
     }
   },
   data: () => ({
@@ -59,22 +54,32 @@ export default {
     }
   },
   mounted() {
-    if (this.auto) {
+    this.restart()
+  },
+  beforeDestroy() {
+    this.stop()
+  },
+  methods: {
+    stop() {
       if (this.autoInterval) {
         clearInterval(this.autoInterval)
       }
+    },
+    restart() {
+      if (this.auto) {
+        if (this.autoInterval) {
+          clearInterval(this.autoInterval)
+        }
 
-      this.autoInterval = setInterval(() => {
-        this.inc()
-      }, 1000)
-    }
-  },
-  beforeDestroy() {
-    if (this.autoInterval) {
-      clearInterval(this.autoInterval)
-    }
-  },
-  methods: {
+        this.autoInterval = setInterval(() => {
+          this.inc()
+        }, this.interval)
+      }
+    },
+    goto(slide) {
+      this.stop()
+      this.current = slide
+    },
     inc() {
       if (this.current >= this.max) {
         this.current = 0
