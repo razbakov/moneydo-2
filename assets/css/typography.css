@@ -15,10 +15,10 @@ html {
   @apply font-semibold;
 }
 .typo a {
-  @apply text-blue-600 underline;
+  @apply text-brand-primary underline;
 }
 .typo a:hover {
-  @apply text-blue-800 no-underline;
+  @apply text-brand-dark no-underline;
 }
 .typo strong a {
   @apply font-bold;

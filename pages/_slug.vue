@@ -1,5 +1,7 @@
 <template>
-  <nuxt-content :document="page" />
+  <div :class="classes">
+    <nuxt-content :document="page" />
+  </div>
 </template>
 
 <script>
@@ -19,6 +21,17 @@ export default {
 
     return {
       page
+    }
+  },
+  computed: {
+    classes() {
+      let classes = this.page.container
+        ? this.page.container
+        : 'p-4 mx-auto max-w-2xl '
+
+      classes += this.page.notypo ? '' : 'typo'
+
+      return classes
     }
   },
   setup() {

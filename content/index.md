@@ -1,4 +1,5 @@
 ---
+notypo: true
 features:
   - title: Simple plan
     image: /screens/budget.gif
@@ -18,15 +19,14 @@ benefits:
 ---
 
 <w-hero
-  class="p-4 mx-auto max-w-2xl"
   title="Your budget in a mindful and simple way"
   subtitle="Plan personal budget and track daily expenses with kakeibo"
   button="Try for free"
   to="/signup"></w-hero>
 
-<w-slides :slides="features" class="p-4 mx-auto max-w-2xl"></w-slides>
+<w-slides :slides="features"></w-slides>
 
-<div class="mt-16 text-center px-4 mx-auto max-w-2xl typo">
+<div class="mt-16 text-center typo">
 
 ## Achieve more with a good strategy
 
@@ -35,7 +35,6 @@ benefits:
 </div>
 
 <w-hero
-  class="p-4 mx-auto max-w-2xl"
   title="Ready to start?"
   button="Try for free"
   to="/signup"></w-hero>

@@ -1,8 +1,5 @@
 ---
-title: "We'll help you save more. See for yourself with a 30-day free trial."
-subtitle: 'For just 3€ per month you get access to a web app with seamless syncing of your data. All we need is your email to start your 30-day free trial, no credit card required.'
-ctaLabel: Try for free
-cta: /signup
+notypo: true
 faq:
   - title: Why a subscription?
     description: A subscription model is the only sustainable approach for an
@@ -15,6 +12,16 @@ faq:
     description: No.
 ---
 
+<w-hero
+  title="We'll help you save more. See for yourself with a 30-day free trial."
+  subtitle="For just 3€ per month you get access to a web app with seamless syncing of your data. All we need is your email to start your 30-day free trial, no credit card required."
+  button="Try for free"
+  to="/signup"></w-hero>
+
+<div class="mt-16 typo">
+
 ## Frequently Asked Questions
 
 <w-list :items="faq">
+
+</div>

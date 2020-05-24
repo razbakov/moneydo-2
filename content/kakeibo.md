@@ -1,3 +1,9 @@
+---
+notypo: true
+---
+
+<div class="typo">
+
 # What is Kakeibo?
 
 The Japanese tradition of using a kakeibo, which translates to “household finance ledger,” offers an easy solution to mindless spending habits. This budgeting system combines tracking purchases with the habit of mindfulness in order to reign in unnecessary spending and help you achieve savings goals.
@@ -13,3 +19,10 @@ Some benefits of kakeibo are:
 - It pays attention to present, past and future.
 - It encourages saving small amounts daily rather than occasional big sums.
 - It celebrates small achievements.
+
+</div>
+
+<w-hero
+  title="Ready to use Kakeibo?"
+  button="Start for free"
+  to="/signup"></w-hero>
