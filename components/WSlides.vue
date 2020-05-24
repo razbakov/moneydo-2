@@ -5,15 +5,23 @@
         <button
           v-for="(slide, index) in slides"
           :key="index"
-          class="block text-left w-full py-2 px-4 hover:bg-brand-primary"
+          class="block text-left w-full cursor-pointer hover:text-brand-black font-bold"
           :class="
-            current === index
-              ? 'bg-brand-primary text-white'
-              : 'bg-brand-primary+2'
+            current === index ? 'text-brand-black' : 'text-brand-primary+2'
           "
           @mouseover="goto(index)"
         >
-          {{ slide.title }}
+          <div class="py-2 leading-tight">
+            {{ slide.title }}
+          </div>
+          <div
+            :style="{ width: `${progress}%` }"
+            :class="
+              current === index
+                ? 'border-brand-dark border-b-2'
+                : 'border-brand-white border-b-2'
+            "
+          ></div>
         </button>
       </div>
     </div>
@@ -41,16 +49,24 @@ export default {
     },
     interval: {
       type: Number,
-      default: 2000
+      default: 1000
     }
   },
   data: () => ({
     current: 0,
-    autoInterval: null
+    autoInterval: null,
+    timeLeft: 0
   }),
   computed: {
     max() {
       return this.slides.length - 1
+    },
+    progress() {
+      if (!this.interval) {
+        return 100
+      }
+
+      return ((this.interval - this.timeLeft) / this.interval) * 100
     }
   },
   mounted() {
@@ -62,18 +78,27 @@ export default {
   methods: {
     stop() {
       if (this.autoInterval) {
+        this.timeLeft = this.interval
         clearInterval(this.autoInterval)
       }
     },
     restart() {
       if (this.auto) {
+        this.timeLeft = this.interval
+        const progressIncrement = 1
+
         if (this.autoInterval) {
           clearInterval(this.autoInterval)
         }
 
         this.autoInterval = setInterval(() => {
-          this.inc()
-        }, this.interval)
+          this.timeLeft -= progressIncrement
+
+          if (this.timeLeft < 0) {
+            this.timeLeft = this.interval
+            this.inc()
+          }
+        }, progressIncrement)
       }
     },
     goto(slide) {

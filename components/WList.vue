@@ -1,5 +1,5 @@
 <template>
-  <w-grid cols="2">
+  <w-grid :cols="cols">
     <div v-for="(item, index) in items" :key="index">
       <h3>{{ item.title }}</h3>
       <p>{{ item.description }}</p>
@@ -13,6 +13,10 @@ export default {
     items: {
       type: Array,
       default: () => []
+    },
+    cols: {
+      type: [String, Number],
+      default: 2
     }
   }
 }
