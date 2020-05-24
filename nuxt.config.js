@@ -55,11 +55,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [
-    '@/assets/css/typography.css',
-    '@/assets/css/vendors.scss',
-    '@/assets/css/animation.css'
-  ],
+  css: ['@/assets/css/vendors.scss'],
   /*
    ** Plugins to load before mounting the App
    */
