@@ -183,7 +183,7 @@ export default {
 
     const expenses = computed(() =>
       docs.value
-        .filter((e) => e.category === categoryId)
+        .filter((e) => categoryId === 'history' || e.category === categoryId)
         .filter((e) => e.budget === budgetId.value)
         .sort(sortBy('date'))
     )

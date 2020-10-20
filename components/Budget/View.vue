@@ -172,6 +172,12 @@
             Add Category
           </div>
         </div>
+
+        <div class="flex justify-center text-sm">
+          <router-link to="/app/history" class="underline p-4 mt-4"
+            >Show All Expenses</router-link
+          >
+        </div>
       </div>
       <TPopup
         v-if="isMovingEditorShown"
