@@ -38,7 +38,7 @@
       <h4 class="mb-1 font-bold text-xs text-gray-600 flex justify-between">
         <span>Budget</span>
         <span v-if="active" class="font-normal"
-          >{{ leftover }} left for
+          >{{ money(leftover) }} left for
           <span v-if="!daysLeft">today</span>
           <span v-else>{{ daysLeft }} days</span>
         </span>
@@ -67,13 +67,13 @@
             v-if="activeMode === 'today' && available(envelope.name) >= 0"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ available(envelope.name) }}
+            {{ money(available(envelope.name)) }}
           </div>
           <div
             v-if="activeMode === 'today' && available(envelope.name) < 0"
             class="text-lg font-bold font-mono text-brand-fail leading-none"
           >
-            {{ projection(envelope.name) }}
+            {{ money(projection(envelope.name)) }}
           </div>
           <div
             v-if="activeMode === 'left'"
@@ -82,13 +82,13 @@
               left(envelope.name) < 0 ? 'text-brand-fail' : 'text-brand-success'
             "
           >
-            {{ left(envelope.name) }}
+            {{ money(left(envelope.name)) }}
           </div>
           <div
             v-if="activeMode === 'planned'"
             class="text-lg font-bold font-mono text-green leading-none"
           >
-            {{ planned(envelope.name) }}
+            {{ money(planned(envelope.name)) }}
           </div>
           <div class="text-xs text-gray-600">
             {{ envelope.label }}
@@ -158,7 +158,7 @@
               </div>
             </div>
             <div class="font-mono text-black text-lg items-center flex pr-2">
-              {{ totalExpenses(category.id) }}
+              {{ money(totalExpenses(category.id)) }}
             </div>
           </div>
         </router-link>
@@ -274,6 +274,8 @@ import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
 import { getDate, getDateObect } from '~/utils'
 
+const money = (num) => Math.round((num || 0) * 100) / 100
+
 export default {
   components: {
     TIcon,
@@ -306,13 +308,14 @@ export default {
 
       return expenses.value
         .filter((e) => e.category === category)
-        .map((e) => parseInt(e.amount || 0))
+        .map((e) => parseFloat(e.amount || 0.0))
         .reduce((previous, current) => previous + current, 0)
     }
 
     load(params.budgetId)
 
     return {
+      money,
       doc,
       categories,
       create,
@@ -481,7 +484,7 @@ export default {
         return this.planned(envelope)
       }
 
-      return Math.round((this.planned(envelope) / this.totalDays) * 100) / 100
+      return this.planned(envelope) / this.totalDays
     },
     daysToAvoid(envelope) {
       return Math.round((this.available(envelope) / this.perDay(envelope)) * -1)
@@ -493,11 +496,7 @@ export default {
 
       const result = this.left(envelope) / this.daysLeft
 
-      if (result < 0) {
-        return '-'
-      }
-
-      return Math.round(result)
+      return result
     },
     available(envelope) {
       if (!this.daysSpent) {
@@ -507,7 +506,7 @@ export default {
       const result =
         this.perDay(envelope) * this.daysSpent - this.spent(envelope)
 
-      return Math.round(result)
+      return result
     },
     removeCategory() {
       this.remove(this.editingCategory)
@@ -515,7 +514,7 @@ export default {
       this.editingCategory = false
     },
     startTutorial() {
-      if (!this.account.tutorialDashboard) {
+      if (!this.account?.tutorialDashboard) {
         setTimeout(this.$tours.dashboard.start, 500)
       }
     },
