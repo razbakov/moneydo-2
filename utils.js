@@ -1,4 +1,6 @@
 import format from 'date-fns/format'
+import saveAs from 'file-saver'
+import { dsvFormat } from 'd3'
 
 export const sortBy = (_key) => {
   let key = _key
@@ -55,4 +57,29 @@ export const getTime = (val) => {
 
 export const openURL = (url) => {
   window.open(url, '_blank')
+}
+
+export const saveCSV = (data, filename) => {
+  const csvFile = dsvFormat(',').format(data)
+  const blob = new Blob([csvFile], {
+    type: 'text/csv;charset=utf-8'
+  })
+
+  saveAs(blob, filename)
+}
+
+export const camelcase = (text) => {
+  if (!text) {
+    return ''
+  }
+
+  const result = text.replace(/([A-Z])/g, ' $1')
+  const finalResult = result.charAt(0).toUpperCase() + result.slice(1)
+  return finalResult
+}
+
+export const sanitize = (input, trim) => {
+  const val = input
+  const expression = new RegExp(trim, 'gi')
+  return val.replace(expression, '').trim()
 }

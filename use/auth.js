@@ -26,13 +26,11 @@ const state = Vue.observable({
 export default () => {
   const { router, route } = useRouter()
 
-  let isAdmin = false
-
   if (window) {
-    isAdmin = false
-
     setMarketing()
   }
+
+  const isAdmin = computed(() => state.account?.admin === true)
 
   const budgetId = computed(() => state.account?.budgetId)
 
