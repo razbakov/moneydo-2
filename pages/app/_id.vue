@@ -128,7 +128,7 @@ import useCollection from '~/use/collection'
 import useEnvelopes from '~/use/envelopes'
 import useDoc from '~/use/doc'
 import useRouter from '~/use/router'
-import { getDateTime } from '~/utils'
+import { getDateTime, sortBy } from '~/utils'
 import TIcon from '~/components/TIcon'
 import TButton from '~/components/TButton'
 import TLoader from '~/components/TLoader'
@@ -185,6 +185,7 @@ export default {
       docs.value
         .filter((e) => e.category === categoryId)
         .filter((e) => e.budget === budgetId.value)
+        .sort(sortBy('date'))
     )
 
     const { getEnvelope } = useEnvelopes()
