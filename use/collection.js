@@ -6,7 +6,7 @@ import useAuth from '~/use/auth'
 
 const state = Vue.observable({})
 
-export default (name, filter) => {
+export default (name, filter, all) => {
   let field = ''
   let value = ''
 
@@ -30,7 +30,9 @@ export default (name, filter) => {
         return
       }
 
-      collection = collection.where('createdBy', '==', uid.value)
+      if (!all) {
+        collection = collection.where('createdBy', '==', uid.value)
+      }
 
       if (field) {
         collection = collection.where(field, '==', value)

@@ -114,7 +114,7 @@ export default {
     }
   },
   setup() {
-    const { docs } = useCollection('accounts')
+    const { docs } = useCollection('accounts', false, true)
     const { remove: removeAccount, update: updateAccount } = useDoc('accounts')
     const nameFilter = ref('')
     const activeFilter = ref('')
