@@ -240,20 +240,7 @@
           label="Envelope"
           class="mb-6"
         />
-        <TSelect
-          v-model="categoryChanges.icon"
-          label="Icon"
-          :options="[
-            'car',
-            'coffee',
-            'fridge',
-            'house',
-            'lobby',
-            'notes',
-            'store'
-          ]"
-          class="mb-6"
-        />
+        <TSelectIcon v-model="categoryChanges.icon" class="mb-6" />
         <div class="flex justify-start">
           <TButton
             v-if="editingCategory != '-'"
@@ -329,7 +316,7 @@ export default {
         label: 'By Budget'
       },
       {
-        name: 'total',
+        name: '-total',
         label: 'By most spent'
       }
     ]
@@ -582,6 +569,7 @@ export default {
     },
     addCategory() {
       this.editingCategory = '-'
+      this.categoryChanges = { icon: 'coffee', envelope: 'wants' }
     },
     editCategory(id) {
       return () => {

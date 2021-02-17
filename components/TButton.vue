@@ -49,6 +49,7 @@ export default {
         secondary:
           'bg-transparent text-primary font-semibold py-2 px-4 border border-primary rounded no-underline hover:bg-primary hover:text-white hover:border-transparent',
         link: 'underline font-semibold py-2 px-4 hover:no-underline',
+        icon: 'p-2 rounded border shadow',
         nav:
           'w-full text-left block font-semibold py-2 px-4 hover:bg-brand-dark'
       }
