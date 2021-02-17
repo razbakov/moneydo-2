@@ -24,13 +24,13 @@
 
     <div
       v-if="isMenuOpen"
-      class="absolute w-full h-full top-0 left-0 bg-black opacity-50 z-20"
+      class="fixed w-full h-full top-0 left-0 bg-black opacity-50 z-20"
       @click="isMenuOpen = false"
     />
     <transition name="slide">
       <nav
         v-if="isMenuOpen"
-        class="text-lg absolute left-0 w-56 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
+        class="text-lg fixed left-0 w-56 bottom-0 top-0 bg-dark text-white z-30 shadow-lg"
       >
         <LayoutNavigation />
       </nav>
