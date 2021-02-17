@@ -69,6 +69,10 @@ export default {
   },
   methods: {
     getTotal(planned) {
+      if (!planned) {
+        return 0
+      }
+
       return Object.values(planned).reduce(
         (previous, current) => +previous + parseInt(current || 0),
         0
