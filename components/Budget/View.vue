@@ -127,6 +127,17 @@
           >
         </div>
       </transition>
+      <div class="flex mt-4 mb-2 justify-center">
+        <div
+          v-for="sortMode in sortModes"
+          :key="sortMode.name"
+          class="py-1 px-4 text-dark rounded cursor-pointer"
+          :class="{ 'bg-white shadow': sortMode.name === activeSortMode }"
+          @click="activeSortMode = sortMode.name"
+        >
+          {{ sortMode.label }}
+        </div>
+      </div>
       <div id="categories" class="mt-2">
         <h4 class="mb-1 font-bold text-xs text-gray-600">
           Expenses by Category
@@ -153,12 +164,12 @@
                   {{ category.label }}
                 </div>
                 <div class="text-xs text-gray-600 leading-none">
-                  {{ getEnvelope(category.envelope).label }}
+                  {{ category.envelopeLabel }}
                 </div>
               </div>
             </div>
             <div class="font-mono text-black text-lg items-center flex pr-2">
-              {{ money(totalExpenses(category.id)) }}
+              {{ money(category.total) }}
             </div>
           </div>
         </router-link>
@@ -268,6 +279,7 @@
 </template>
 
 <script>
+import { computed, ref } from '@vue/composition-api'
 import { differenceInDays } from 'date-fns'
 import useAuth from '~/use/auth'
 import useDoc from '~/use/doc'
@@ -278,7 +290,7 @@ import TPopup from '~/components/TPopup'
 import TField from '~/components/TField'
 import TSelect from '~/components/TSelect'
 import TButton from '~/components/TButton'
-import { getDate, getDateObect } from '~/utils'
+import { getDate, getDateObect, sortBy } from '~/utils'
 
 const money = (num) => Math.round((num || 0) * 100) / 100
 
@@ -300,12 +312,29 @@ export default {
     const { account, updateAccount } = useAuth()
     const { load, doc, update: updateBudget } = useDoc('budgets')
     const { create, update, remove } = useDoc('categories')
-    const { getById, docs: categories } = useCollection('categories')
+    const { getById, docs: categoriesList } = useCollection('categories')
     const { docs: expenses } = useCollection('expenses', {
       budget: params.budgetId
     })
 
     const { envelopes, getEnvelope } = useEnvelopes()
+
+    const sortModes = [
+      {
+        name: 'label',
+        label: 'By A-Z'
+      },
+      {
+        name: 'envelopeLabel',
+        label: 'By Budget'
+      },
+      {
+        name: 'total',
+        label: 'By most spent'
+      }
+    ]
+
+    const activeSortMode = ref('label')
 
     const totalExpenses = (category) => {
       if (!expenses.value.length) {
@@ -317,6 +346,16 @@ export default {
         .map((e) => parseFloat(e.amount || 0.0))
         .reduce((previous, current) => previous + current, 0)
     }
+
+    const categories = computed(() => {
+      return categoriesList.value
+        .map((category) => ({
+          ...category,
+          envelopeLabel: getEnvelope(category.envelope).label,
+          total: totalExpenses(category.id)
+        }))
+        .sort(sortBy(activeSortMode.value))
+    })
 
     load(params.budgetId)
 
@@ -334,7 +373,9 @@ export default {
       envelopes,
       getEnvelope,
       updateBudget,
-      getDate
+      getDate,
+      sortModes,
+      activeSortMode
     }
   },
   data: () => ({
