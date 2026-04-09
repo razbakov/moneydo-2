@@ -41,6 +41,20 @@
           >
             {{ $t('auth.signin') }}
           </TButton>
+
+          <select
+            :value="$i18n.locale"
+            class="ml-4 bg-transparent border border-gray-300 rounded px-2 py-1 text-sm cursor-pointer"
+            @change="$router.push(switchLocalePath($event.target.value))"
+          >
+            <option
+              v-for="locale in $i18n.locales"
+              :key="locale.code"
+              :value="locale.code"
+            >
+              {{ locale.name }}
+            </option>
+          </select>
         </div>
       </nav>
     </header>
