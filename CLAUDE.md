@@ -1,5 +1,11 @@
 # MoneyDo
 
+## Framework
+
+@/Users/razbakov/Projects/ikigai-team/CLAUDE.md
+
+---
+
 A Kakeibo-based personal budget planner and expense tracker. Radically simple — plan your budget, see your daily allowance, track what you spend, reflect on what brings value.
 
 - **URL:** https://moneydo.netlify.app/
